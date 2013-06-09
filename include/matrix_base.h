@@ -23,10 +23,10 @@ public:
 
 public:
 	//operators are implemented by the derived classes
-   virtual matrix_base operator+(matrix_base& operand) = 0;
-   virtual matrix_base operator-(matrix_base& operand) = 0;
-   virtual matrix_base operator*(matrix_base& operand) = 0;
-   virtual matrix_base operator[](int suffix) = 0;	
+   virtual matrix_base operator+	(matrix_base& operand) = 0;
+   virtual matrix_base operator-	(matrix_base& operand) = 0;
+   virtual matrix_base operator*	(matrix_base& operand) = 0;
+   virtual int*		   operator[]	(int suffix) = 0;			//suffix operator will return the address of the row (which is integer array)
 };
 
 
