@@ -4,10 +4,11 @@
 /*
    This is the base class from which we will derive our matrix classes
 */
-class BaseMat
+class MatrixBase
 {
-   BaseMat();
-	
+public:
+   BaseMat(unsigned int degree);
+
 }
 
 
