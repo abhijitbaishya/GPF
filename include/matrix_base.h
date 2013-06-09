@@ -4,10 +4,12 @@
 /*
    This is the base class from which we will derive our matrix classes
 */
-class MatrixBase
+class matrix_base
 {
 public:
-   BaseMat(unsigned int degree);
+   //This matrix class will be used to represent graphs and since graphs always use
+   //squire matrices, there fore only degree is sufficient
+   matrix_base(unsigned int degree);
 
 }
 
