@@ -19,18 +19,20 @@ class matrix_row
 		int*			row_ptr;			//actual row pointer
 		unsigned int 	num_elements;		//number of elements
 	
-	
 	public:
 		//constructors and destructors
 		virtual ~matrix_row		();								//The destructor
 		matrix_row				(unsigned int num_elements);	//The constructor
+		matrix_row				(matrix_row& copy);				//The copy constructor
 		matrix_row				();								//creates empty row
 	
 	
 	public:
 		//member functions
-		int  operator[]						(int suffix) throw (exc_out_of_bounds*);		//returns an element from the matrix_row given an index
+		int  			operator[]			(int suffix) throw (exc_out_of_bounds*);	//returns an element from the matrix_row given an index
 																						//it also handles bound checking
+		matrix_row		operator=			(matrix_row& row);							//The assignment operator
+		void			dump_to_stdout		();											//dumps the row to stdout
 		void 			create_elements		(unsigned int num_elements);				//in case the default constructor is used use this to create the row
 		unsigned int 	get_num_elements	();											//returns no of elements in this row (may be usefull for sparse matrix)
 };
@@ -49,7 +51,8 @@ class matrix_row
 class matrix_base
 {
 	public:
-		virtual unsigned int 	get_degree		() = 0;				//returns the degree of the matrix(both simple and sparse matrix has a degree)
+		virtual void				dump_to_stdout	() = 0;					//prints the matrix to stdout
+		virtual unsigned int 		get_degree		() = 0;					//returns the degree of the matrix(both simple and sparse matrix has a degree)
 		virtual matrix_row& 		operator[]		(int suffix) const = 0;	//Returns a matrix row which also overloads a [] operator
 };
 
