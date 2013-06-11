@@ -1,10 +1,13 @@
 #ifndef _BASE_MAT
 #define _BASE_MAT
-#include<iostream>
+#include	<iostream>
+#include	<memory.h>
+#include	"../include/gpf_exceptions.h"
 
 //Graph Processor Framework
 namespace gpf
 {
+
 /*
 	 int array does not suppot bound checking that is why we created a special array class
 	 matrix_row which will serve as the rows of a matrix_base class.
@@ -21,13 +24,15 @@ class matrix_row
 		//constructors and destructors
 		virtual ~matrix_row		();								//The destructor
 		matrix_row				(unsigned int num_elements);	//The constructor
+		matrix_row				();								//creates empty row
 	
 	
 	public:
 		//member functions
-		int  operator[]	(int suffix);		//returns an element from the matrix_row given an index
-										//it also handles bound checking
-		unsigned int get_num_elements();	//returns no of elements in this row (may be usefull for sparse matrix)
+		int  operator[]						(int suffix) throw (exc_out_of_bounds*);		//returns an element from the matrix_row given an index
+																						//it also handles bound checking
+		void 			create_elements		(unsigned int num_elements);				//in case the default constructor is used use this to create the row
+		unsigned int 	get_num_elements	();											//returns no of elements in this row (may be usefull for sparse matrix)
 };
 
 
@@ -45,8 +50,7 @@ class matrix_base
 {
 	public:
 		virtual unsigned int 	get_degree		() = 0;				//returns the degree of the matrix(both simple and sparse matrix has a degree)
-		virtual matrix_row*		get_rows		() = 0;				//returns base address of the rows array
-		virtual matrix_row 		operator[]		(int suffix) = 0;	//Returns a matrix row which also overloads a [] operator
+		virtual matrix_row& 		operator[]		(int suffix) = 0;	//Returns a matrix row which also overloads a [] operator
 };
 
 
