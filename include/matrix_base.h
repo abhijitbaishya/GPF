@@ -22,13 +22,6 @@ public:
    //This matrix class will be used to represent graphs and since graphs always use
    //squire matrices, there fore only degree is sufficient
    matrix_base(unsigned int degree);
-
-public:
-	//operators are implemented by the derived classes
-   virtual matrix_base operator+	(matrix_base& operand) = 0;
-   virtual matrix_base operator-	(matrix_base& operand) = 0;
-   virtual matrix_base operator*	(matrix_base& operand) = 0;
-   virtual int*		   operator[]	(int suffix) = 0;			//suffix operator will return the address of the row (which is integer array)
 };
 
 
