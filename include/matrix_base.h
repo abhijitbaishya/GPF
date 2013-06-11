@@ -50,7 +50,7 @@ class matrix_base
 {
 	public:
 		virtual unsigned int 	get_degree		() = 0;				//returns the degree of the matrix(both simple and sparse matrix has a degree)
-		virtual matrix_row& 		operator[]		(int suffix) = 0;	//Returns a matrix row which also overloads a [] operator
+		virtual matrix_row& 		operator[]		(int suffix) const = 0;	//Returns a matrix row which also overloads a [] operator
 };
 
 
