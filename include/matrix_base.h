@@ -18,7 +18,7 @@ class matrix_row
 		//member variables
 		int*			row_ptr;			//actual row pointer
 		unsigned int 	num_elements;		//number of elements
-		unsigned int 	capacity;			//capacity
+		unsigned int 	_capacity;			//capacity
 	public:
 		//constructors and destructors
 		virtual ~matrix_row		();								//The destructor
@@ -34,9 +34,13 @@ class matrix_row
 																						//it also handles bound checking
 		matrix_row		operator=			(matrix_row& row);							//The assignment operator
 		void			dump_to_stdout		();											//dumps the row to stdout
-		void 			create_elements		(unsigned int num_elements);				//in case the default constructor is used use this to create the row
-		unsigned int 	get_num_elements	();											//returns no of elements in this row (may be usefull for sparse matrix)
-		void			add_vertex			();											//adds a new vertex to the array
+		unsigned int 	size				();											//returns no of elements in this row (may be usefull for sparse matrix)
+		void			resize				(int new_size);								//resize the array (here size is no of elements)
+		void 			insert				(int pos,int val);							//insert an element
+		void 			rm					(int pos);									//remove an elements frompos position
+		int 			capacity			();											//returns the capacity value
+		void			push_back			(int val);									//adds an element at the end of the row
+		int 			pos_back			();											//removes an elements from the back of the row
 };
 
 
