@@ -18,11 +18,12 @@ class matrix_row
 		//member variables
 		int*			row_ptr;			//actual row pointer
 		unsigned int 	num_elements;		//number of elements
-	
+		unsigned int 	capacity;			//capacity
 	public:
 		//constructors and destructors
 		virtual ~matrix_row		();								//The destructor
-		matrix_row				(unsigned int num_elements);	//The constructor
+		matrix_row				(unsigned int num_elements);	//The constructor default size increment is 16 bytes or a paragraph
+								 
 		matrix_row				(matrix_row& copy);				//The copy constructor
 		matrix_row				();								//creates empty row
 	
@@ -35,6 +36,7 @@ class matrix_row
 		void			dump_to_stdout		();											//dumps the row to stdout
 		void 			create_elements		(unsigned int num_elements);				//in case the default constructor is used use this to create the row
 		unsigned int 	get_num_elements	();											//returns no of elements in this row (may be usefull for sparse matrix)
+		void			add_vertex			();											//adds a new vertex to the array
 };
 
 
