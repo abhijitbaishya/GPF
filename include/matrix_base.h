@@ -40,7 +40,7 @@ class matrix_row
 		void 			rm					(int pos);									//remove an elements frompos position
 		int 			capacity			();											//returns the capacity value
 		void			push_back			(int val);									//adds an element at the end of the row
-		int 			pos_back			();											//removes an elements from the back of the row
+		//int 			pos_back			();											//removes an elements from the back of the row
 };
 
 

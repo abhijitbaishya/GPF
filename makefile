@@ -13,5 +13,5 @@ app.exe : matrix_base.o simple_matrix.o main.o
 matrix_base.o simple_matrix.o main.o: matrix_base.cpp simple_matrix.cpp main.cpp
 	$(CPP) $(CPP_FLAGS) -c  $^
 clean:
-	@rm *.o
+	@rm *.o *.exe
 	@echo "Cleaned!"
