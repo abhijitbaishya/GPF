@@ -1,16 +1,16 @@
-#include "../include/matrix_base.h"
-#include<stdlib.h>
+#include "../include/gpf_vector.h"
+
 
 namespace gpf
 {
-//The default constructor
-matrix_row::matrix_row()
+
+gpf_vector::gpf_vector()
 {
 	row_ptr 		= NULL;
 	num_elements 	= 0;	//it is okay to have 0 elements in a row
 }
-//The constructor for matrix_row
-matrix_row::matrix_row(unsigned int num_elements)
+//The constructor for gpf_vector
+gpf_vector::gpf_vector(unsigned int num_elements)
 {
 	if(num_elements != 0)
 	try
@@ -42,21 +42,21 @@ matrix_row::matrix_row(unsigned int num_elements)
 }
 
 //The destructor defination
-matrix_row::~matrix_row()
+gpf_vector::~gpf_vector()
 {
 	if(row_ptr != NULL)	//if this row not assigned to an object or passed to any function delete it
 	{
 		free(row_ptr);	//call free because we used malloc
 		row_ptr = NULL;
 #ifdef DEBUG
-		std::cout<<std::endl<<"matrix_row::~matrix_row() >> Freed memory row_ptr"<<std::endl;
+		std::cout<<std::endl<<"gpf_vector::~gpf_vector() >> Freed memory row_ptr"<<std::endl;
 #endif
 	}
 }
 
 
 //The copy constructor
-matrix_row::matrix_row(matrix_row& row)
+gpf_vector::gpf_vector(gpf_vector& row)
 {
 	std::cout<<"Copy ctor invoked"<<std::endl;
 	if(row.num_elements != 0)
@@ -73,7 +73,7 @@ matrix_row::matrix_row(matrix_row& row)
 	this->num_elements = row.num_elements;	//copy other states
 }
 
-matrix_row	matrix_row::operator=(matrix_row& row)
+gpf_vector&	gpf_vector::operator=(gpf_vector& row)
 {
 #ifdef DEBUG
 	std::cout<<"assignment operator invoked"<<std::endl;
@@ -95,7 +95,7 @@ matrix_row	matrix_row::operator=(matrix_row& row)
 	return *this;
 }
 
-int& matrix_row::operator[] (int suffix) throw (exc_out_of_bounds*)
+int& gpf_vector::operator[] (int suffix) throw (exc_out_of_bounds*)
 {
 	if(suffix <= (num_elements-1)) //if we are within bounds
 	{
@@ -106,12 +106,12 @@ int& matrix_row::operator[] (int suffix) throw (exc_out_of_bounds*)
 
 
 //returns number of elements
-unsigned int matrix_row::size()
+unsigned int gpf_vector::size()
 {
 	return num_elements;
 }
 
-void matrix_row::dump_to_stdout()
+void gpf_vector::dump_to_stdout()
 {
 	if(num_elements == 0) { std::cout<<"<EMPTY>"<<std::endl; return; }
 	
@@ -120,7 +120,7 @@ void matrix_row::dump_to_stdout()
 	std::cout<<std::endl;
 }
 
-void matrix_row::insert(int pos,int val)
+void gpf_vector::insert(int pos,int val)
 {
 	if(pos >= num_elements) throw new exc_out_of_bounds(pos);	//array index out of bound
 	
@@ -151,7 +151,7 @@ void matrix_row::insert(int pos,int val)
 	this->row_ptr[pos] = val;	//assign the value to pos-th element
 }
 
-void matrix_row::rm(int pos)
+void gpf_vector::rm(int pos)
 {
 	int re_calc;
 	if(pos >= num_elements) throw new exc_out_of_bounds(pos);	//array index out of bound
@@ -191,7 +191,7 @@ void matrix_row::rm(int pos)
 	}
 }
 
-void matrix_row::resize(int new_size)
+void gpf_vector::resize(int new_size)
 {
 	if(new_size < 0 ) throw new exc_invalid_operation();
 	if(new_size == 0) {free(this->row_ptr);this->row_ptr = NULL;}	//special cases
@@ -226,12 +226,12 @@ void matrix_row::resize(int new_size)
 	}
 }
 
-int matrix_row::capacity()
+int gpf_vector::capacity()
 {
 	return this->_capacity;
 }
 
-void matrix_row::push_back(int val)
+void gpf_vector::push_back(int val)
 {
 	num_elements++;			//increment the number of elements
 	int re_calc = (												//recalculate the space required
@@ -263,12 +263,12 @@ void matrix_row::push_back(int val)
 	this->row_ptr[num_elements-1] = val;	//append the value to the end of the array
 }
 
-bool matrix_row::empty()
+bool gpf_vector::empty()
 {
 	return (this->num_elements == 0);
 }
 
-int matrix_row::pop_back()
+int gpf_vector::pop_back()
 {
 	int ret;
 	
@@ -280,15 +280,14 @@ int matrix_row::pop_back()
 	return ret;								//return
 }
 
-
-
-
-
-
-
-
-
-
+int gpf_vector::find(int val)
+{
+	for(int i = 0 ; i < this->size() ; i++)
+		if(row_ptr[i] == val) return i;		//if data found return index
+	return -1;
+}
 
 
 }
+
+

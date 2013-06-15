@@ -14,7 +14,7 @@ class simple_matrix:public matrix_base
 {
 	private:
 		unsigned int 	degree;			//The degree of the matrix
-		matrix_row**	mat_rows;		//array of row pointers for ease of shifting
+		gpf_vector**	mat_rows;		//array of row pointers for ease of shifting
 										
 	public:
 		//The virtual destructor
@@ -25,8 +25,8 @@ class simple_matrix:public matrix_base
 	
 		//dumps the matrix to stdout
 		unsigned int 		get_degree		()	{return degree;}
-		//returns a matrix_row object
-		matrix_row& 		operator[]		(int suffix) const;	//Returns a matrix row which also overloads a [] operator	
+		//returns a gpf_vector object
+		gpf_vector& 		operator[]		(int suffix) const;	//Returns a matrix row which also overloads a [] operator	
 		void				dump_to_stdout	();
 };
 
