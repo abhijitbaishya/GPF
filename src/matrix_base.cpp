@@ -95,7 +95,7 @@ matrix_row	matrix_row::operator=(matrix_row& row)
 	return *this;
 }
 
-int matrix_row::operator[] (int suffix) throw (exc_out_of_bounds*)
+int& matrix_row::operator[] (int suffix) throw (exc_out_of_bounds*)
 {
 	if(suffix <= (num_elements-1)) //if we are within bounds
 	{
@@ -156,7 +156,15 @@ void matrix_row::rm(int pos)
 	int re_calc;
 	if(pos >= num_elements) throw new exc_out_of_bounds(pos);	//array index out of bound
 	
-	if(num_elements <= 16) {num_elements--;return;}	//array size is less than one paragraph so just decrement the number of elements
+	if(num_elements <= 16) 
+	{	
+		for(int i = pos + 1 ; i < num_elements ; i++)
+			this->row_ptr[i-1] = this->row_ptr[i];	//shift the array to left
+		
+			num_elements--;
+		
+		return;
+	}	//array size is less than one paragraph so just decrement the number of elements
 	
 	try
 	{

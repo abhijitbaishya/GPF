@@ -29,7 +29,7 @@ class matrix_row
 	
 	public:
 	//member functions
-		void 			rm					(int pos);									//remove an elements frompos position
+		void 			rm					(int pos);									//remove an elements from pos position
 		unsigned int 	size				();											//returns no of elements in this row (may be usefull for sparse matrix)
 		bool			empty				();											//returns true if the array is empty
 		void			resize				(int new_size);								//resize the array (here size is no of elements)
@@ -40,7 +40,7 @@ class matrix_row
 		void			dump_to_stdout		();											//dumps the row to stdout
 		
 	//overloaded operators
-		int  			operator[]			(int suffix) throw (exc_out_of_bounds*);	//returns an element from the matrix_row given an index
+		int&  			operator[]			(int suffix) throw (exc_out_of_bounds*);	//returns an element from the matrix_row given an index
 																						//it also handles bound checking
 		matrix_row		operator=			(matrix_row& row);							//The assignment operator
 };

@@ -7,9 +7,17 @@ using namespace gpf;
 
 int main()
 {
-	simple_matrix simp(5);
+	matrix_row row(5);
 	
-	simp.dump_to_stdout();
+	for(int i=0;i<row.size();i++)
+		row[i] = i;
+	
+	row.dump_to_stdout();
+	
+	row.rm(2);
+
+	
+	row.dump_to_stdout();
 	
 	return 0;
 	
