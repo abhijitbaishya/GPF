@@ -56,11 +56,19 @@ void simple_matrix::dump_to_stdout()
 		(*this)[i].dump_to_stdout();		//mat[i] is matrix_row again
 }
 
-void simple_matrix::rm_row(int index)
-{
-	if(index >= degree) throw new exc_invalid_operation();	//incomplete
 }
 
 
 
-}
+
+
+
+
+
+
+
+
+
+
+
+

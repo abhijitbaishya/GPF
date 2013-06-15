@@ -28,9 +28,6 @@ class simple_matrix:public matrix_base
 		//returns a matrix_row object
 		matrix_row& 		operator[]		(int suffix) const;	//Returns a matrix row which also overloads a [] operator	
 		void				dump_to_stdout	();
-		protected:
-		void				rm_row			(int index);		//remove row
-		void				rm_col			(int index);		//remove column
 };
 
 
