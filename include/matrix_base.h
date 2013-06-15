@@ -33,6 +33,7 @@ class matrix_row
 		int  			operator[]			(int suffix) throw (exc_out_of_bounds*);	//returns an element from the matrix_row given an index
 																						//it also handles bound checking
 		matrix_row		operator=			(matrix_row& row);							//The assignment operator
+		bool			empty				();											//returns true if the array is empty
 		void			dump_to_stdout		();											//dumps the row to stdout
 		unsigned int 	size				();											//returns no of elements in this row (may be usefull for sparse matrix)
 		void			resize				(int new_size);								//resize the array (here size is no of elements)
@@ -40,7 +41,7 @@ class matrix_row
 		void 			rm					(int pos);									//remove an elements frompos position
 		int 			capacity			();											//returns the capacity value
 		void			push_back			(int val);									//adds an element at the end of the row
-		//int 			pos_back			();											//removes an elements from the back of the row
+		int 			pop_back			();											//removes an elements from the back of the row
 };
 
 

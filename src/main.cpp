@@ -12,8 +12,13 @@ int main()
 	cout<<"The capacity of the row is :"<<row.capacity()<<endl
 		<<"The size of the row is :"<<row.size()<<endl;
 	
-	row.insert(2,45);
-row.insert(2,23);
+	int test = row.pop_back();
+	test = row.pop_back();
+	test = row.pop_back();
+
+
+	cout<<test<<endl;
+
 
 	
 	cout<<"The capacity of the row is :"<<row.capacity()<<endl
