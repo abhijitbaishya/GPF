@@ -15,33 +15,34 @@ namespace gpf
 class matrix_row
 {
 	private:
-		//member variables
+	//member variables
 		int*			row_ptr;			//actual row pointer
 		unsigned int 	num_elements;		//number of elements
 		unsigned int 	_capacity;			//capacity
 	public:
-		//constructors and destructors
+	//constructors and destructors
 		virtual ~matrix_row		();								//The destructor
-		matrix_row				(unsigned int num_elements);	//The constructor default size increment is 16 bytes or a paragraph
-								 
-		matrix_row				(matrix_row& copy);				//The copy constructor
+
 		matrix_row				();								//creates empty row
-	
+		matrix_row				(matrix_row& copy);				//The copy constructor
+		matrix_row				(unsigned int num_elements);	//The constructor default size increment is 16 bytes or a paragraph	
 	
 	public:
-		//member functions
+	//member functions
+		void 			rm					(int pos);									//remove an elements frompos position
+		unsigned int 	size				();											//returns no of elements in this row (may be usefull for sparse matrix)
+		bool			empty				();											//returns true if the array is empty
+		void			resize				(int new_size);								//resize the array (here size is no of elements)
+		void 			insert				(int pos,int val);							//insert an element
+		int 			pop_back			();											//removes an elements from the back of the row
+		int 			capacity			();											//returns the capacity value
+		void			push_back			(int val);									//adds an element at the end of the row
+		void			dump_to_stdout		();											//dumps the row to stdout
+		
+	//overloaded operators
 		int  			operator[]			(int suffix) throw (exc_out_of_bounds*);	//returns an element from the matrix_row given an index
 																						//it also handles bound checking
 		matrix_row		operator=			(matrix_row& row);							//The assignment operator
-		bool			empty				();											//returns true if the array is empty
-		void			dump_to_stdout		();											//dumps the row to stdout
-		unsigned int 	size				();											//returns no of elements in this row (may be usefull for sparse matrix)
-		void			resize				(int new_size);								//resize the array (here size is no of elements)
-		void 			insert				(int pos,int val);							//insert an element
-		void 			rm					(int pos);									//remove an elements frompos position
-		int 			capacity			();											//returns the capacity value
-		void			push_back			(int val);									//adds an element at the end of the row
-		int 			pop_back			();											//removes an elements from the back of the row
 };
 
 
