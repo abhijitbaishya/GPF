@@ -265,7 +265,7 @@ void gpf_vector::push_back(int val)
 
 bool gpf_vector::empty()
 {
-	return (this->num_elements == 0);
+	return (!this->num_elements == 0);
 }
 
 int gpf_vector::pop_back()

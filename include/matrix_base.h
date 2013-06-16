@@ -18,6 +18,7 @@ namespace gpf
 class matrix_base
 {
 	public:
+		//virtual bool				is_null			() = 0;
 		virtual void				dump_to_stdout	() = 0;					//prints the matrix to stdout
 		virtual unsigned int 		get_degree		() = 0;					//returns the degree of the matrix(both simple and sparse matrix has a degree)
 		virtual gpf_vector& 		operator[]		(int suffix) const = 0;	//Returns a matrix row which also overloads a [] operator

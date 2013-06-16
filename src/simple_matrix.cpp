@@ -3,6 +3,11 @@
 namespace gpf
 {
 
+simple_matrix::simple_matrix()
+{
+	this->degree = 0;
+}
+
 //The simple_matrix constructor
 simple_matrix::simple_matrix(unsigned int degree)
 {
@@ -51,6 +56,7 @@ gpf_vector& simple_matrix::operator[](int suffix) const
 //this method dumps the matrix formatted to the stdout
 void simple_matrix::dump_to_stdout()
 {
+	if(degree == 0) std::cout<<"<EMPTY>"<<std::endl;
 	std::cout<<std::endl;
 	for(int i = 0 ; i < degree ; i++)
 		(*this)[i].dump_to_stdout();		//mat[i] is gpf_vector again
