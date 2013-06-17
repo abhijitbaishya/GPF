@@ -17,8 +17,8 @@ class directed_base:public graph_base,public simple_matrix
 		directed_base(unsigned int num_vertices);
 	
 	//see the graph_base class for description
-		bool empty			();	//unusable
-		bool is_null		();	//completely disconnected i.e. no edges
+		bool empty			();	//the graph is unusable
+		bool is_null		();	//completely disconnected i.e. no edges (may be useful)
 		bool is_directed	();
 		bool is_undirected	();
 		
