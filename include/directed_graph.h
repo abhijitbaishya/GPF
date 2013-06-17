@@ -6,15 +6,15 @@
 namespace gpf
 {
 
-class directed_base:public graph_base,public simple_matrix
+class directed_graph:public graph_base,public simple_matrix
 {
 	public:
 		vertex_set	vertices;	//set of vertices
 		int 		ref_index;	//used to store the reference vertex index (may be used for some algorithms)
 	public:
 	//The constructor
-		directed_base();	//default constriuctor
-		directed_base(unsigned int num_vertices);
+		directed_graph();	//default constriuctor
+		directed_graph(unsigned int num_vertices);
 	
 	//see the graph_base class for description
 		bool empty			();		//the graph is unusable
@@ -37,7 +37,7 @@ class directed_base:public graph_base,public simple_matrix
 		//distance between two vertex
 		int  distance_between	(int src_lebel,int dst_lebel);
 		
-	friend	std::ostream&	operator<<(std::ostream& out,directed_base& graph);	//later
+	friend	std::ostream&	operator<<(std::ostream& out,directed_graph& graph);	//later
 };
 
 }
