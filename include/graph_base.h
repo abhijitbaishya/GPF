@@ -79,9 +79,9 @@ class graph_base
 	//returns the index of the closest vertex from the index-th vertex;
 		//virtual int  closest			(int index) = 0;
 	//adds a new vertex to the graph and returns its index
-		//*virtual int  add_vertex			(int lebel)			= 0;
+		virtual int  add_vertex			(int lebel)			= 0;
 	//removes a vertex from the graph
-		//*virtual void rm_vertex			(int lebel)			= 0;
+		virtual void rm_vertex			(int lebel)			= 0;
 	//adds an edge from ref to lebel
 		//virtual void add_edge			(int lebel) = 0;
 	//adds a new edge from src to dst
