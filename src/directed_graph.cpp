@@ -1,4 +1,4 @@
-#include 	"../include/directed_base.h"
+#include 	"../include/directed_graph.h"
 
 namespace gpf
 {
@@ -95,7 +95,7 @@ int directed_base::distance_from(int lebel)
 	if(	vertices.size() == 0 ||				//if start_index is out of bounds or there are no vertices 
 		ref_index >= vertices.size()) throw new exc_invalid_operation();
 		
-	src_index = vertices.index_of(lebel);	//find the index of lebel
+	int src_index = vertices.index_of(lebel);	//find the index of lebel
 	
 	if(src_index >= 0) return (*this)[src_index][ref_index];	//return the distance from src to ref
 	else return -1;	//else return -1
@@ -111,6 +111,18 @@ int directed_base::distance_between(int src_lebel,int dst_lebel)
 	if(src_index >= 0 && dst_index >= 0) return (*this)[src_index][dst_index];	//both lebels are valid so return distance
 																				//order of index matters in directed graphs
 	else return -1;		//else return -1										
+}
+
+int directed_base::num_edges()
+{
+	int num = 0;
+	int deg = this->get_degree();
+	
+	for(int i = 0 ; i < deg ; i++)
+		for(int j = 0 ; j < deg ; j++)
+			if((*this)[i][j] >= 0) num++;
+			
+	return num; //return thr number of edges
 }
 
 }

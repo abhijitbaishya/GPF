@@ -54,7 +54,7 @@ class graph_base
 		//virtual bool is_connected	()  = 0;	//whether the graph is connected
 		
 		virtual int num_vertices	() = 0;
-		//virtual int num_edges		() = 0;
+		virtual int num_edges		() = 0;
 		
 		/*
 		The edge related functions are graph type dependent so dont include them here

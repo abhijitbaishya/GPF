@@ -24,6 +24,7 @@ class directed_base:public graph_base,public simple_matrix
 		bool is_undirected	();		//is the graph an undirected graph
 		
 		int  num_vertices			();				//returns the number of vertices of the graph
+		int  num_edges				();
 		
 		void set_ref_vertex			(int lebel);	//sets the reference vertex
 		int  add_vertex				(int lebel);	//adds a new vertex to the graph
