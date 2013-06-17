@@ -8,9 +8,9 @@ namespace gpf
 
 class directed_base:public graph_base,public simple_matrix
 {
-	private:
-		vertex_set	vertices;
-		int 		ref_index;	//used to store the ref vertex index
+	public:
+		vertex_set	vertices;	//set of vertices
+		int 		ref_index;	//used to store the reference vertex index (may be used for some algorithms)
 	public:
 	//The constructor
 		directed_base();	//default constriuctor
@@ -22,14 +22,13 @@ class directed_base:public graph_base,public simple_matrix
 		bool is_directed	();
 		bool is_undirected	();
 		
-		int  num_vertices		();
+		int  num_vertices			();				//returns the number of vertices of the graph
 		
-		//bool is_connected	();	//whether the graph is connected
+		void set_ref_vertex			(int lebel);	//sets the reference vertex
+		int  add_vertex				(int lebel);	//adds a new vertex to the graph
+		void rm_vertex				(int lebel);	//removes a vertex from the graph
 		
-		void set_ref_vertex			(int lebel);
-		int  add_vertex				(int lebel);
-		//void rm_vertex				(int lebel);
-	friend	std::ostream&	operator<<(std::ostream& out,directed_base& graph);
+	friend	std::ostream&	operator<<(std::ostream& out,directed_base& graph);	//later
 };
 
 }

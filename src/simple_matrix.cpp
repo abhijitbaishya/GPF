@@ -37,6 +37,7 @@ simple_matrix::~simple_matrix()
 	{
 		for(int i = 0; i < degree ; i++)
 		{
+			std::cout<<"Deleting matrix row number "<<i<<std::endl;
 			delete mat_rows[i];	//delete each rows 
 		}
 		free( mat_rows );			//mat_rows was allocated using malloc so free it
@@ -66,13 +67,38 @@ void simple_matrix::dump_to_stdout()
 
 void simple_matrix::add_degree()
 {	
+	gpf_vector** temp = 0;	//temporary pointer
+	
 	for(int i = 0 ; i < degree ; i++)
 	{
 		(*this)[i].push_back(0);	//add a column of zeroes to the matrix
-	}
-	realloc(mat_rows,sizeof(gpf_vector*) * (degree + 1));	//add slot for another row pointer
-	mat_rows[degree] = new gpf_vector(degree+1);	//allocate the last row
-	degree++;	//increment the degree value at last
+	}	
+
+	temp =(gpf_vector**) malloc(sizeof(gpf_vector*)*(degree+1));  //allocate space for our new matrix (with one more row)
+	
+	for(int i = 0 ; i < degree ; i++) temp[i] = mat_rows[i];	  //copy previous matrix rows
+	
+	free(mat_rows);		//free previous matrix
+
+	temp[degree] = new gpf_vector(degree + 1);	//create the last row
+
+	mat_rows = temp;	//update the pointer
+    degree++;			//update degree
+}
+
+void simple_matrix::rm_rowcol(int index)
+{
+	if(index >= degree) throw new exc_out_of_bounds(index);	//throw array index out of range
+	
+	delete mat_rows[index];		//delete the memory associated with the array
+	
+	for(int i = index ; i < degree - 1 ; i++ )	//shift the array
+		mat_rows[i] = mat_rows[i+1];
+		
+	for(int i = 0 ; i < degree ; i++ )
+		mat_rows[i]->rm(index);			//remove column entries
+	
+	degree--;	//since now one row and one column is removed reduce the degree value
 }
 
 }

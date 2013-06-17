@@ -30,7 +30,8 @@ class simple_matrix:public matrix_base
 		gpf_vector& 		operator[]		(int suffix) const;	//Returns a matrix row which also overloads a [] operator	
 		void				dump_to_stdout	();
 	protected:
-		void 				add_degree		();
+		void 				add_degree		();					//adds a new null column and null row to the matrix (useful for vertex add operation)
+		void 				rm_rowcol		(int index);		//removes a row
 };
 
 

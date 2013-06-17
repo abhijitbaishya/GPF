@@ -9,7 +9,7 @@ vertex_set::vertex_set():lebels()
 vertex_set::vertex_set(unsigned int num_vertex):lebels(num_vertex)	//initialize the lebels
 {
 	//by default lebels are ascending numbers from 0
-	for(int i = 0; i < lebels.size() ; i++)
+	for(int i = 0; i < num_vertex ; i++)
 		lebels[i] = i;
 }
 
@@ -39,8 +39,8 @@ bool vertex_set::add(int lebel)
 {
 	for(int i = 0 ; i < lebels.size() ; i++)	//if lebel already exists then return false
 		if(lebels[i] == lebel) return false;
-	else
-		lebels.push_back(lebel);	//else add the vertex and return true
+
+	lebels.push_back(lebel);	//else add the vertex and return true
 	return true;
 }
 

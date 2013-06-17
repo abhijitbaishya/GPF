@@ -2,7 +2,7 @@ CC=gcc				#The c compiler
 CPP=g++				#The cpp compiler
 LIB_DIR=lib			#The library directory
 BIN_DIR=bin	$ 		#The binary directory
-CPP_FLAGS=-DDEBUG
+CPP_FLAGS=-DDEBUG -g
 SRC_LIST=directed_base.cpp gpf_vector.cpp graph_base.cpp simple_matrix.cpp main.cpp
 
 vpath %.cpp src		#search here for source files

@@ -60,6 +60,12 @@ int directed_base::add_vertex(int lebel)
 	return vertices.size();	//the size of the vertex set is the index of the newly addes vertex
 }
 
+void directed_base::rm_vertex(int lebel)
+{
+	rm_rowcol(vertices.index_of(lebel));	//erase the row and column corresponding to the vertex lebel
+	vertices.rm(lebel);						//delete the vertex from the vertex set
+}
+
 }
 
 

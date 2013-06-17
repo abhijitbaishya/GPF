@@ -9,11 +9,13 @@ using namespace gpf;
 
 int main()
 {
-	directed_base dir;
+	directed_base dir(5);
+	
+	
+	dir.add_vertex(12);
+	dir.rm_vertex(12);
 	
 	dir.dump_to_stdout();
-	
-	dir.add_vertex(20);
 	
 	cout<<"The number of vertices are : "<<dir.num_vertices()<<endl;
 	
