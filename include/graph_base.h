@@ -32,6 +32,8 @@ class vertex_set
 		bool	exists		(int lebel);
 	//returns if the set is empty
 		bool	empty		();
+	//size returns the size of the vertex set
+		int 	size		();
 	
 };
 
@@ -45,11 +47,14 @@ class graph_base
 	public:
 	//Boolean properties
 		virtual bool empty			()  = 0;	//unusable
-		//virtual bool is_null		()	= 0;	//completely disconnected i.e. no edges
+		virtual bool is_null		()	= 0;	//completely disconnected i.e. no edges
 		//virtual bool is_complete	() 	= 0;
-		//virtual bool is_directed	() 	= 0;
-		//virtual bool is_undircted	() 	= 0;
+		virtual bool is_directed	() 	= 0;
+		virtual bool is_undirected	() 	= 0;
 		//virtual bool is_connected	()  = 0;	//whether the graph is connected
+		
+		virtual int num_vertices	() = 0;
+		//virtual int num_edges		() = 0;
 		
 		/*
 		The edge related functions are graph type dependent so dont include them here
@@ -58,7 +63,7 @@ class graph_base
 		*/
 		
 	//Start vertex is required for some algorithms
-		//*virtual void set_ref_vertex	(int index) = 0;
+		virtual void set_ref_vertex	(int lebel) = 0;
 	//returns the distance of index-th vertex's distance from ref vertex
 		//virtual int  distance_to		(int index) = 0;
 	//returns the distance from ref vertex to index-th vertex

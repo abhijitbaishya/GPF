@@ -1,4 +1,6 @@
 #include "../include/simple_matrix.h"
+#include	<stdlib.h>
+#include	<memory.h>
 
 namespace gpf
 {
@@ -14,7 +16,7 @@ simple_matrix::simple_matrix(unsigned int degree)
 	try
 	{
 		this->degree = degree;					//store the degree
-		mat_rows = new gpf_vector*[degree];		//allocate degree number of row pointers for ease of shifting
+		mat_rows = (gpf_vector**)malloc( sizeof(gpf_vector*) * degree);		//allocate degree number of row pointers for ease of shifting
 		
 		for(int i = 0; i < degree ; i++)
 		{
@@ -37,7 +39,7 @@ simple_matrix::~simple_matrix()
 		{
 			delete mat_rows[i];	//delete each rows 
 		}
-		delete[] mat_rows;			//now delete the list of pointers
+		free( mat_rows );			//mat_rows was allocated using malloc so free it
 #ifdef DEBUG
 		std::cout<<std::endl<<"simple_matrix::~simple_matrix() >> Freed memory mat_rows[]"<<std::endl;
 #endif
@@ -60,6 +62,17 @@ void simple_matrix::dump_to_stdout()
 	std::cout<<std::endl;
 	for(int i = 0 ; i < degree ; i++)
 		(*this)[i].dump_to_stdout();		//mat[i] is gpf_vector again
+}
+
+void simple_matrix::add_degree()
+{	
+	for(int i = 0 ; i < degree ; i++)
+	{
+		(*this)[i].push_back(0);	//add a column of zeroes to the matrix
+	}
+	realloc(mat_rows,sizeof(gpf_vector*) * (degree + 1));	//add slot for another row pointer
+	mat_rows[degree] = new gpf_vector(degree+1);	//allocate the last row
+	degree++;	//increment the degree value at last
 }
 
 }

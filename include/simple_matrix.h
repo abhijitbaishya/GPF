@@ -13,7 +13,7 @@ namespace gpf
 class simple_matrix:public matrix_base
 {
 	private:
-		int 	degree;					//The degree of the matrix
+		int 			degree;					//The degree of the matrix
 		gpf_vector**	mat_rows;		//array of row pointers for ease of shifting
 										
 	public:
@@ -29,6 +29,8 @@ class simple_matrix:public matrix_base
 		//returns a gpf_vector object
 		gpf_vector& 		operator[]		(int suffix) const;	//Returns a matrix row which also overloads a [] operator	
 		void				dump_to_stdout	();
+	protected:
+		void 				add_degree		();
 };
 
 

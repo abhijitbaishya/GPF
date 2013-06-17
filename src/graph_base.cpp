@@ -70,6 +70,10 @@ bool vertex_set::empty()
 	return lebels.empty();
 }
 
+int vertex_set::size()
+{
+	return lebels.size();	//returns the size of the vertex array
+}
 
 }
 

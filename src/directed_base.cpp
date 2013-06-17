@@ -34,7 +34,34 @@ bool directed_base::is_null()
 	
 }
 
+bool directed_base::is_directed() { return true; }
+bool directed_base::is_undirected() { return false; }
 
+void directed_base::set_ref_vertex(int lebel)
+{
+	int i = vertices.index_of(lebel);	//find the index of the vertex
+	if(i == -1) throw new exc_invalid_operation();	//illegal : lebel not found
+	this->ref_index = i;	//store for future use
+}
 
+int directed_base::num_vertices()
+{
+	return vertices.size();	//erturns the number of vertices
+}
+
+int directed_base::add_vertex(int lebel)
+{
+	if(vertices.exists(lebel))	throw new exc_invalid_operation();
+	
+	vertices.add(lebel);	//add the vertex to vertex set
+	
+	this->add_degree();		//increase the degree of the graph i.e. add a new column and row for the new vertex
+	
+	return vertices.size();	//the size of the vertex set is the index of the newly addes vertex
+}
 
 }
+
+
+
+

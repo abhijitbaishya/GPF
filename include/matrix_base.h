@@ -8,7 +8,7 @@
 //Graph Processor Framework
 namespace gpf
 {
-/*
+/**
    DESC : 	matrix_base is the interface for both simple_matrix and sparse_matrix to 
 			model directed and undirected graphs respectively. simple_matrix and sparse_matrix
 			are declared in there respective headers named as their class names.

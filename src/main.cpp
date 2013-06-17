@@ -13,7 +13,9 @@ int main()
 	
 	dir.dump_to_stdout();
 	
-	cout<<"The graph is : "<<dir.is_null()<<"And : "<<dir.empty()<<endl;
+	dir.add_vertex(20);
+	
+	cout<<"The number of vertices are : "<<dir.num_vertices()<<endl;
 	
 	return 0;
 	
