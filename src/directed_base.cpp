@@ -5,13 +5,14 @@ namespace gpf
 
 directed_base::directed_base():vertices()
 {
+	ref_index = 0;	//by default start index is 0
 }
 
 directed_base::directed_base(unsigned int num_vertices):
 				simple_matrix(num_vertices),	//initialize the edges (initially null)
 				vertices(num_vertices)			//initialize the vertices (by default lebeled 0,1,2,3,....)
 {
-	
+	ref_index = 0;
 }
 
 bool directed_base::empty()
@@ -66,7 +67,66 @@ void directed_base::rm_vertex(int lebel)
 	vertices.rm(lebel);						//delete the vertex from the vertex set
 }
 
+bool directed_base::is_complete()
+{
+	int deg = get_degree();	//get the degree of the incidence matrix
+	for(int i = 0 ; i < deg ; i++)
+		for(int j = 0 ; j < deg ; j++)
+		{
+			if( i == j) continue;	//ignore self loops
+			if((*this)[i][j] < 1) return false;
+		}
+	return true;	//if we did not find a disconnection then return true
 }
+
+int directed_base::distance_to(int lebel)
+{
+	if(	vertices.size() == 0 ||				//if start_index is out of bounds or there are no vertices 
+		ref_index >= vertices.size()) throw new exc_invalid_operation();
+	
+	int dst_index = vertices.index_of(lebel);
+	if(dst_index >= 0) return (*this)[ref_index][dst_index];	//note that distance may be 0 but may not -ve
+	else
+		return -1;		//no edge was found
+}
+
+int directed_base::distance_from(int lebel)
+{
+	if(	vertices.size() == 0 ||				//if start_index is out of bounds or there are no vertices 
+		ref_index >= vertices.size()) throw new exc_invalid_operation();
+		
+	src_index = vertices.index_of(lebel);	//find the index of lebel
+	
+	if(src_index >= 0) return (*this)[src_index][ref_index];	//return the distance from src to ref
+	else return -1;	//else return -1
+}
+
+int directed_base::distance_between(int src_lebel,int dst_lebel)
+{
+	int src_index,dst_index;
+	
+	src_index = vertices.index_of(src_lebel);
+	dst_index = vertices.index_of(dst_lebel);
+	
+	if(src_index >= 0 && dst_index >= 0) return (*this)[src_index][dst_index];	//both lebels are valid so return distance
+																				//order of index matters in directed graphs
+	else return -1;		//else return -1										
+}
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

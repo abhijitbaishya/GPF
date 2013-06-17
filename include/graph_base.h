@@ -40,7 +40,7 @@ class vertex_set
 
 /**
  *	It is a pure interface from which we will derive the directed_graph and undirected_graph
- *	subclasses.
+ *	subclasses. So this class declares functions that are common for both the derived classes.
  */
 class graph_base
 {
@@ -48,7 +48,7 @@ class graph_base
 	//Boolean properties
 		virtual bool empty			()  = 0;	//unusable
 		virtual bool is_null		()	= 0;	//completely disconnected i.e. no edges
-		//virtual bool is_complete	() 	= 0;
+		virtual bool is_complete	() 	= 0;
 		virtual bool is_directed	() 	= 0;
 		virtual bool is_undirected	() 	= 0;
 		//virtual bool is_connected	()  = 0;	//whether the graph is connected
@@ -64,12 +64,8 @@ class graph_base
 		
 	//Start vertex is required for some algorithms
 		virtual void set_ref_vertex	(int lebel) = 0;
-	//returns the distance of index-th vertex's distance from ref vertex
-		//virtual int  distance_to		(int index) = 0;
-	//returns the distance from ref vertex to index-th vertex
-		//virtual int  distance_from		(int index) = 0;
 	//returns the distance between two vertices
-		//virtual int  distance_between	(int src_index,int dst_index) = 0;
+		virtual int  distance_between	(int src_lebel,int dst_lebel) = 0;
 	//returns the number of adjacent vertex of the ref vertex
 		//virtual void num_adjacent		()			= 0;
 	//returns the number of adjacent vertex of the index-th vertex
