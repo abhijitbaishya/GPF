@@ -23,16 +23,22 @@ class simple_matrix:public matrix_base
 		virtual ~simple_matrix();
 	
 	//constructors
-		simple_matrix();			//creates an empty matrix
-		simple_matrix(int degree);	//creates a matrix with degree rows and columns
+	//creates an empty matrix
+		simple_matrix();
+	//creates a matrix with degree rows and columns
+		simple_matrix(int degree);
+	//The copy constructor
+		simple_matrix(const simple_matrix& copy);
 	
 	//dumps the matrix to stdout
 		int 				get_mat_degree		()	{return degree;}
 	//returns true if the matrix is not yet created
 		bool				empty			();
 	//returns a gpf_vector object
-		gpf_vector& 		operator[]		(int suffix) const;	//Returns a matrix row which also overloads a [] operator	
-		void				dump_to_stdout	();
+	//Returns a matrix row which also overloads a [] operator
+		gpf_vector& 		operator[]		(int suffix) const;
+	//assignment operator
+		simple_matrix& 		operator=		(const simple_matrix& mat);
 	protected:
 	//rm_degree function deletes the last column and the last row
 		void				rm_degree		();

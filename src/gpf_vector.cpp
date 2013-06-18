@@ -74,25 +74,31 @@ gpf_vector::gpf_vector(const gpf_vector& row)
 #endif
 	gpf_vector& temp = const_cast<gpf_vector&>(row);
 	
-	if(row.num_elements == 0) this->resize(0);	//if input array is empty then make this empty too
-	if(row.num_elements != 0)	//if input is not an empty row
-	{
-		this->resize(row.num_elements);	//resize this array
-	}
+	//if input array is empty then make this empty too
+	if(row.num_elements == 0) { this->resize(0); return;}
 	
+	//if input is not an empty row
+	this->resize(row.num_elements);	//resize this array
+	
+	//copy all elements
 	for(int i = 0; i < row.num_elements ; i++ )
-		row_ptr[i] = temp[i];				//copy all elements
-	this->num_elements = temp.num_elements;	//copy other states
+		row_ptr[i] = temp[i];
+	
+	//copy other states
+	this->num_elements = temp.num_elements;
 }
 
 gpf_vector&	gpf_vector::operator=(const gpf_vector& row)
 {
 #ifdef DEBUG
-	std::cout<<"Assignment operator invoked"<<std::endl;
+	std::cout<<"Assignment operator invoked!"<<std::endl;
 #endif
 	if(row.num_elements == 0 ) 
+	{
 		this->resize(0);	//empty this array also
-	else
+		return (*this);
+	}
+
 	try
 	{
 		this->resize(row.num_elements);			//resize this array to fit row
@@ -101,9 +107,10 @@ gpf_vector&	gpf_vector::operator=(const gpf_vector& row)
 	{
 		throw new exc_alloc_failed();
 	}
-
-	//copy the entire memory in one shot
-	memcpy(this->row_ptr, row.row_ptr, row._capacity * sizeof(float));	
+	
+	//copy all the elements
+	for(int i = row.num_elements ; i >= 0 ; i--)
+		this->row_ptr[i] = row.row_ptr[i];
 		
 	return *this;
 }
@@ -234,8 +241,6 @@ void gpf_vector::resize(int new_size)
 				//update the capacity value
 				this->_capacity = recalc;	
 			}
-			//update the number of elements
-			this->num_elements = new_size;
 		}
 		catch(...)
 		{
@@ -243,6 +248,9 @@ void gpf_vector::resize(int new_size)
 			throw new exc_alloc_failed();	
 		}
 	}
+	//update the number of elements outside the if block because if the capacity is bigger control doesnot
+	//reaches inside the if block
+	this->num_elements = new_size;
 }
 
 int gpf_vector::capacity()

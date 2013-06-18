@@ -6,11 +6,11 @@ using namespace gpf;
 
 int main()
 {
-	gpf_vector vec(5);
+	gpf_vector vec(17);
 	
-	gpf_vector vec2(vec);
+	gpf_vector vec2(4);
 	
-	cout<<vec<<vec2;
+	vec.push_back(100);
 	
 	cout<<vec.size()<<" "<<vec2.size()<<endl;
 	cout<<vec.capacity()<<" "<<vec2.capacity()<<endl;

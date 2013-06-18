@@ -51,6 +51,16 @@ simple_matrix::simple_matrix(int degree)
 	}
 }
 
+//the copy constructor
+simple_matrix::simple_matrix(const simple_matrix& copy)
+{
+	//get the degree of the src matrix
+	int deg = copy.degree;
+	//copy each row
+	for(int i = 0 ; i < deg ; i++)
+		this->mat_rows[i] = copy.mat_rows[i];
+}
+
 //The destructor
 simple_matrix::~simple_matrix()
 {
@@ -79,15 +89,6 @@ gpf_vector& simple_matrix::operator[](int suffix) const
 		//returns the suffix-th row (gpf_vector)
 		return *(mat_rows[suffix]);
 	} else throw new exc_out_of_bounds(suffix);
-}
-
-//this method dumps the matrix formatted to the stdout
-void simple_matrix::dump_to_stdout()
-{
-	if(degree == 0) std::cout<<"<EMPTY>"<<std::endl;
-	std::cout<<std::endl;
-	for(int i = 0 ; i < degree ; i++)
-		(*this)[i].dump_to_stdout();		//mat[i] is gpf_vector again
 }
 
 //adds a new row and a new column to the matrix at the extremes
@@ -143,6 +144,13 @@ void simple_matrix::rm_degree()
 bool simple_matrix::empty()
 {
 	return (this->degree == 0);
+}
+
+simple_matrix& simple_matrix::operator=(const simple_matrix& mat)
+{
+	for(int i = mat.degree; i >= 0 ; i--)
+		this->mat_rows[i] = mat.mat_rows[i];
+	return (*this);
 }
 
 }
