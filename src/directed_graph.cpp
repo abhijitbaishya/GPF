@@ -49,8 +49,7 @@ directed_graph::directed_graph(const directed_graph& copy)
 
 bool directed_graph::empty() const
 {
-	//if there are no vertices then the graph is empty
-	return (!vertices.empty());
+	return vertices.empty();
 }
 
 //returns true if null graph
@@ -165,22 +164,42 @@ gpf_vector& directed_graph::operator[] (int suffix) const
 
 directed_graph& directed_graph::operator=(const directed_graph& graph)
 {
-	int deg = this->get_mat_degree();
+	int this_deg = this->get_mat_degree();
+	int src_deg  = graph.get_mat_degree();
 
 	//if the input graph is empty
 	if(graph.empty())
 	{
-	//release the vertices
-		vertices.clear();
-	//release the edges too
+	//clear this graph
 		this->clear();
 	//return this object
 		return (*this);
 	}
+	//if this object is empty but input graph is not
+	if(this->empty())
+	{
+	//copy the vertex set
+		this->vertices = graph.vertices;
+	//add a row+col at a time until it is equal in size with input graph
+		for(int i = 0 ; i < src_deg ; i++)
+			this->add_degree();
+	//now that sizes are same copy each row of graph using the [] operator
+		for(int i = 0 ; i < src_deg ; i++)
+			(*this)[i] = graph[i];
+	//done
+		return (*this);
+	}
 	
 	
-	
-	
+	return (*this);
+}
+
+void directed_graph::clear()
+{
+//IMPORTANT : first edges should be released because some function uses vertex_set size in simple_matrix class
+	simple_matrix::clear();
+//now clear the vertices
+	this->vertices.clear();
 }
 
 }

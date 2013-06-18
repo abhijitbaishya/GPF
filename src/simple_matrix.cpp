@@ -26,6 +26,7 @@ simple_matrix::simple_matrix()
 {
 	//by default the matrix is empty
 	this->degree = 0;
+	this->mat_rows = NULL;
 }
 
 //The simple_matrix constructor
@@ -121,7 +122,7 @@ void simple_matrix::add_degree()
 	//copy previous matrix rows
 	for(int i = 0 ; i < degree ; i++) temp[i] = mat_rows[i];
 	//free previous matrix
-	free(mat_rows);
+	if(this->mat_rows) free(this->mat_rows);
 	//create the last row (by default 0 initialized)
 	temp[degree] = new gpf_vector(degree + 1);
 	//update the pointer

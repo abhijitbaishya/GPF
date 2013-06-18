@@ -67,7 +67,8 @@ bool vertex_set::set_lebel(int index,int lebel)
 
 bool vertex_set::empty() const
 {
-	return lebels.empty();
+//if there are no lebels then the vertex set is empty
+	return (lebels.empty());
 }
 
 int vertex_set::size() const

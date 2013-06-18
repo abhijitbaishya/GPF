@@ -36,6 +36,8 @@ class directed_graph:public graph_base,public simple_matrix
 		int  add_vertex				(int lebel);	//adds a new vertex to the graph
 		void rm_vertex				(int lebel);	//removes a vertex from the graph
 		
+	//clear will empty this graph object
+		void clear				();
 	//returns the distance of index-th vertex's distance from ref vertex
 		int  distance_to		(int lebel) const;
 	//returns the distance from ref vertex to index-th vertex

@@ -8,9 +8,9 @@ namespace gpf
 gpf_vector::gpf_vector()
 {
 	//it is okay to have 0 elements in a row
-	row_ptr 		= NULL;
-	num_elements 	= 0;
-	_capacity		= 0;
+	this->row_ptr 		= NULL;
+	this->num_elements 	= 0;
+	this->_capacity		= 0;
 }
 
 //gpf_vector constructor
@@ -23,7 +23,7 @@ gpf_vector::gpf_vector(int num_elements)
 	{
 		//it is okay to have 0 elements in a row
 		row_ptr 		= NULL;
-		num_elements 	= 0;
+		this->num_elements 	= 0;
 		this->_capacity  = 0;
 	}
 	if(num_elements != 0)
@@ -45,9 +45,6 @@ gpf_vector::gpf_vector(int num_elements)
 	catch(...)
 	{
 		//something went wrong : revert to default values
-		row_ptr 		= NULL;
-		num_elements 	= 0;
-		this->_capacity  = 0;
 		throw new exc_alloc_failed();	//throw our own exception
 	} 
 }
@@ -268,7 +265,7 @@ void gpf_vector::push_back(int val)
 
 bool gpf_vector::empty() const
 {
-	return (!this->num_elements == 0);
+	return (this->num_elements == 0);
 }
 
 float gpf_vector::pop_back()
