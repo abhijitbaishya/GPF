@@ -27,13 +27,15 @@ class simple_matrix:public matrix_base
 		simple_matrix(int degree);	//creates a matrix with degree rows and columns
 	
 	//dumps the matrix to stdout
-		int 				get_degree		()	{return degree;}
+		int 				get_mat_degree		()	{return degree;}
 	//returns true if the matrix is not yet created
 		bool				empty			();
 	//returns a gpf_vector object
 		gpf_vector& 		operator[]		(int suffix) const;	//Returns a matrix row which also overloads a [] operator	
 		void				dump_to_stdout	();
 	protected:
+	//rm_degree function deletes the last column and the last row
+		void				rm_degree		();
 	//adds a new null column and null row to the matrix (useful for vertex add operation)
 		void 				add_degree		();
 	//removes a row and a column (reduces the degree of the matrix)

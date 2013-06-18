@@ -2,28 +2,56 @@
 
 namespace gpf
 {
+std::istream& operator>>(std::istream& in, directed_graph& graph)
+{
+	
+}
+std::ostream&	operator<<(std::ostream& out,directed_graph& graph)
+{
+	//more formatted out put to be done later
+	if(graph.empty()) { out<<std::endl<<"<EMPTY>"<<std::endl; return out; }
+	
+	int deg = graph.get_mat_degree();
+	
+	for(int i = 0 ; i < deg ; i++)
+	{
+		for(int j = 0 ; j < deg ; j++)
+		{
+			out<<graph[i][j]<<" ";
+		}
+		out<<std::endl;
+	}
+	return out;
+}
+
 
 directed_graph::directed_graph():vertices()
 {
 	ref_index = 0;	//by default start index is 0
 }
 
-directed_graph::directed_graph(unsigned int num_vertices):
+directed_graph::directed_graph(int num_vertices):
 				simple_matrix(num_vertices),	//initialize the edges (initially null)
 				vertices(num_vertices)			//initialize the vertices (by default lebeled 0,1,2,3,....)
 {
 	ref_index = 0;
 }
 
+directed_graph::directed_graph(const directed_graph& copy):vertices(copy.num_vertices)
+{
+	//to be done later
+}
+
 bool directed_graph::empty()
 {
-	return vertices.empty();	//if there are no vertices then the graph is empty
+	//if there are no vertices then the graph is empty
+	return (!vertices.empty());
 }
 
 //returns true if null graph
 bool directed_graph::is_null()
 {
-	int deg = get_degree();	//get the degree of the edge matrix
+	int deg = get_mat_degree();	//get the degree of the edge matrix
 	int i , j;
 	
 	if(deg == 0) return false;
@@ -69,7 +97,7 @@ void directed_graph::rm_vertex(int lebel)
 
 bool directed_graph::is_complete()
 {
-	int deg = get_degree();	//get the degree of the incidence matrix
+	int deg = get_mat_degree();	//get the degree of the incidence matrix
 	for(int i = 0 ; i < deg ; i++)
 		for(int j = 0 ; j < deg ; j++)
 		{
@@ -116,13 +144,18 @@ int directed_graph::distance_between(int src_lebel,int dst_lebel)
 int directed_graph::num_edges()
 {
 	int num = 0;
-	int deg = this->get_degree();
+	int deg = this->get_mat_degree();
 	
 	for(int i = 0 ; i < deg ; i++)
 		for(int j = 0 ; j < deg ; j++)
 			if((*this)[i][j] >= 0) num++;
 			
 	return num; //return thr number of edges
+}
+
+gpf_vector& directed_graph::operator[] (int suffix)
+{
+	return simple_matrix::operator[](suffix);
 }
 
 }

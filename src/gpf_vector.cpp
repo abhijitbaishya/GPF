@@ -16,6 +16,16 @@ gpf_vector::gpf_vector()
 //gpf_vector constructor
 gpf_vector::gpf_vector(int num_elements)
 {
+	//number of elements cannot be negative
+	if(num_elements < 0) throw new exc_invalid_operation();
+	
+	if(num_elements == 0)
+	{
+		//it is okay to have 0 elements in a row
+		row_ptr 		= NULL;
+		num_elements 	= 0;
+		this->_capacity  = 0;
+	}
 	if(num_elements != 0)
 	try
 	{
@@ -40,13 +50,6 @@ gpf_vector::gpf_vector(int num_elements)
 		this->_capacity  = 0;
 		throw new exc_alloc_failed();	//throw our own exception
 	} 
-	else if(num_elements == 0)
-	{
-		//it is okay to have 0 elements in a row
-		row_ptr 		= NULL;
-		num_elements 	= 0;
-		this->_capacity  = 0;
-	}
 }
 
 //The destructor defination

@@ -13,8 +13,12 @@ class directed_graph:public graph_base,public simple_matrix
 		int 		ref_index;	//used to store the reference vertex index (may be used for some algorithms)
 	public:
 	//The constructor
-		directed_graph();	//default constriuctor
-		directed_graph(unsigned int num_vertices);
+	//the default constriuctor
+		directed_graph();
+	//constructor with number of vertices
+		directed_graph(int num_vertices);
+	//copy constructor
+		directed_graph(const directed_graph& copy);
 	
 	//see the graph_base class for description
 		bool empty			();		//the graph is unusable
@@ -30,15 +34,31 @@ class directed_graph:public graph_base,public simple_matrix
 		int  add_vertex				(int lebel);	//adds a new vertex to the graph
 		void rm_vertex				(int lebel);	//removes a vertex from the graph
 		
-		//returns the distance of index-th vertex's distance from ref vertex
+	//returns the distance of index-th vertex's distance from ref vertex
 		int  distance_to		(int lebel);
-		//returns the distance from ref vertex to index-th vertex
+	//returns the distance from ref vertex to index-th vertex
 		int  distance_from		(int lebel);
-		//distance between two vertex
+	//distance between two vertex
 		int  distance_between	(int src_lebel,int dst_lebel);
 		
-		friend	std::ostream&	operator<<(std::ostream& out,directed_graph& graph);	//later
+	//assignment operator overloaded returns a persistant copy
+		directed_graph	operator=(directed_graph& graph);
+		
+	private:
+		//override the operator[] privately to prevent the user from using [] on directed_graph objects and instead
+		//use manualy calling respective edge functions (but friend functions can still use this)
+		gpf_vector&	operator[](int suffix);
+		
+		//inserter overloaded operator to output simple_graph object using << operator
+		friend	std::ostream&	operator<<(std::ostream& out,directed_graph& graph);
+		//input operator overloaded
+		friend  std::istream& operator>>(std::istream& in, directed_graph& graph);
 };
+
+//The declaration for inserter operator overloaded function
+std::ostream&	operator<<(std::ostream& out,directed_graph& graph);
+//input operator overloaded
+std::istream& operator>>(std::istream& in, directed_graph& graph);
 
 }
 #endif

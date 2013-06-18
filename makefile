@@ -7,7 +7,7 @@ LIB_DIR=lib
 #The binary directory
 BIN_DIR=bin
 #c++ compiler flags
-CPP_FLAGS=-g
+CPP_FLAGS=-g -lm
 #source file list
 SRC_LIST=directed_graph.cpp gpf_vector.cpp graph_base.cpp simple_matrix.cpp main.cpp
 

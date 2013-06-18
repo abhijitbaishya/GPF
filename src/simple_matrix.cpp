@@ -117,6 +117,8 @@ void simple_matrix::add_degree()
 //removes a row and a column specified by index
 void simple_matrix::rm_rowcol(int index)
 {
+	//index cannot be negative
+	if(index < 0) throw new exc_invalid_operation();
 	//throw array index out of range
 	if(index >= degree) throw new exc_out_of_bounds(index);
 	//delete the memory associated with the array
@@ -125,11 +127,17 @@ void simple_matrix::rm_rowcol(int index)
 	//shift the array : to fill the gap due to a row being deleted
 	for(int i = index ; i < degree - 1 ; i++ )
 		mat_rows[i] = mat_rows[i+1];
-	//remove column entries
+	//remove column entries from each row
 	for(int i = 0 ; i < degree ; i++ )
 		mat_rows[i]->rm(index);
 	//since now one row and one column is removed reduce the degree value
 	degree--;
+}
+//deletes the last row and column of the matrix
+void simple_matrix::rm_degree()
+{
+	//delete the last row and column
+	this->rm_rowcol(this->degree - 1);
 }
 
 bool simple_matrix::empty()

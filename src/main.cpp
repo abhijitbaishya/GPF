@@ -25,9 +25,14 @@ int main()
 	else cout<<"The graph is connected"<<endl;
 */
 	simple_matrix simp(3);
+	directed_graph dir(5);
 	
-	for(int i = 0 ; i < simp.get_degree() ; i++)
-		for(int j = 0; j < simp.get_degree() ; j++ )
+
+	cout<<dir;
+	
+	
+	for(int i = 0 ; i < simp.get_mat_degree() ; i++)
+		for(int j = 0; j < simp.get_mat_degree() ; j++ )
 			simp[i][j] = 0.89;
 	
 	cout<<simp;

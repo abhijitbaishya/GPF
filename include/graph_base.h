@@ -2,6 +2,7 @@
 #define __GRAPH_BASE_
 
 #include "gpf_vector.h"
+#include <math.h>
 
 //graph processing framework namespace
 namespace gpf
