@@ -68,11 +68,12 @@ std::ostream&	operator<<(std::ostream& out,directed_graph& graph)
 	
 	
 	out<<std::endl;
+	out<<'+';
 	for(int i = 0 ; i <= deg ; i++)
 		for(int k = space ; k >= 0 ; k--)
 				(k == 0) ? out<<'+' : out<<'-';
 				
-	out<<std::endl;
+	out<<std::endl<<'|';
 	
 	out.fill(' ');
 	out.width(space);
@@ -87,7 +88,7 @@ std::ostream&	operator<<(std::ostream& out,directed_graph& graph)
 		out<<graph.vertices.lebel_of(i);
 		out<<'|';
 	}
-	out<<std::endl;
+	out<<std::endl<<'+';
 	for(int i = 0 ; i <= deg ; i++)
 		for(int k = space ; k >= 0 ; k--)
 				(k == 0) ? out<<'+' : out<<'-';
@@ -96,6 +97,7 @@ std::ostream&	operator<<(std::ostream& out,directed_graph& graph)
 	
 	for(int i = 0 ; i < deg ; i++)
 	{
+		out<<'|';
 		out.fill(' ');
 		out.width(space);
 		out<<graph.vertices.lebel_of(i);
@@ -107,7 +109,7 @@ std::ostream&	operator<<(std::ostream& out,directed_graph& graph)
 			out<<graph[i][j];
 			out<<'|';
 		}
-		out<<std::endl;
+		out<<std::endl<<'+';
 		for(int i = 0 ; i <= deg ; i++)
 			for(int k = space ; k >= 0 ; k--)
 				(k == 0) ? out<<'+' : out<<'-';
