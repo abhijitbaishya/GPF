@@ -4,41 +4,49 @@
 namespace gpf
 {
 
+//gpf_vector constructor
 gpf_vector::gpf_vector()
 {
+	//it is okay to have 0 elements in a row
 	row_ptr 		= NULL;
-	num_elements 	= 0;	//it is okay to have 0 elements in a row
+	num_elements 	= 0;
+	_capacity		= 0;
 }
-//The constructor for gpf_vector
-gpf_vector::gpf_vector(unsigned int num_elements)
+
+//gpf_vector constructor
+gpf_vector::gpf_vector(int num_elements)
 {
 	if(num_elements != 0)
 	try
 	{
-		this->_capacity = (												//round capacity to boundary 16
+		//round capacity to 16 units boundary
+		this->_capacity = (
 							num_elements % 16 ? 
 							num_elements - (num_elements % 16) + 16 : 
 							num_elements
 						 );
-		
-		this->row_ptr = (int*) malloc ( sizeof(int) * this->_capacity );				//allocate capacity no of integers
-		memset(this->row_ptr,0, sizeof(int) * num_elements);	//zero initialize the whole memory
-
-		this->num_elements = num_elements;						//update the number of elements: note that num_elements <= capacity
+		//allocate capacity no. of floats
+		this->row_ptr = (float*) malloc ( sizeof(float) * this->_capacity );
+		//zero initialize the whole memory
+		memset(this->row_ptr,0, sizeof(float) * num_elements);
+		//update the number of elements: note that num_elements <= capacity
+		this->num_elements = num_elements;
 	}
 	catch(...)
 	{
+		//something went wrong : revert to default values
 		row_ptr 		= NULL;
 		num_elements 	= 0;
 		this->_capacity  = 0;
 		throw new exc_alloc_failed();	//throw our own exception
 	} 
 	else if(num_elements == 0)
-		{
-			row_ptr 		= NULL;
-			num_elements 	= 0;	//it is okay to have 0 elements in a row
-			this->_capacity  = 0;
-		}
+	{
+		//it is okay to have 0 elements in a row
+		row_ptr 		= NULL;
+		num_elements 	= 0;
+		this->_capacity  = 0;
+	}
 }
 
 //The destructor defination
@@ -58,55 +66,56 @@ gpf_vector::~gpf_vector()
 //The copy constructor
 gpf_vector::gpf_vector(gpf_vector& row)
 {
+#ifdef DEBUG
 	std::cout<<"Copy ctor invoked"<<std::endl;
-	if(row.num_elements != 0)
-	try{
-		this->row_ptr = new int[row.num_elements];	//allocate same number of elements as row
-	   }
-	catch(...) 
+#endif
+	if(row.num_elements == 0) this->resize(0);	//if input array is empty then make this empty too
+	if(row.num_elements != 0)	//if input is not an empty row
 	{
-		throw exc_alloc_failed();
+		this->resize(row.num_elements);	//resize this array
 	}
 	
 	for(int i = 0; i < row.num_elements ; i++ )
-		row_ptr[i] = row[i];	//copy all elements
+		row_ptr[i] = row[i];				//copy all elements
 	this->num_elements = row.num_elements;	//copy other states
 }
 
 gpf_vector&	gpf_vector::operator=(gpf_vector& row)
 {
 #ifdef DEBUG
-	std::cout<<"assignment operator invoked"<<std::endl;
+	std::cout<<"Assignment operator invoked"<<std::endl;
 #endif
-	if(row.num_elements != 0)
+	if(row.num_elements == 0 ) 
+		this->resize(0);	//empty this array also
+	else
 	try
 	{
 		this->resize(row.num_elements);			//resize this array to fit row
-		this->num_elements = row.num_elements;	//copy number of elements
-		this->_capacity = row._capacity;		//copy capacity value
 	}
 	catch(...) 
 	{
 		throw new exc_alloc_failed();
 	}
-	
-	memcpy(this->row_ptr,row.row_ptr,row._capacity);	//copy the entire memory in one shot
+
+	//copy the entire memory in one shot
+	memcpy(this->row_ptr, row.row_ptr, row._capacity * sizeof(float));	
 		
 	return *this;
 }
 
-int& gpf_vector::operator[] (int suffix) throw (exc_out_of_bounds*)
+float& gpf_vector::operator[] (int suffix) throw (exc_out_of_bounds*)
 {
-	if(suffix <= (num_elements-1)) //if we are within bounds
+	//if we are within bounds
+	if(suffix <= (num_elements-1))
 	{
 		return row_ptr[suffix];
 	}
-	else throw  new exc_out_of_bounds(suffix);		//throw a out of bounds exception
+	else throw  new exc_out_of_bounds(suffix);	//throw a out of bounds exception
 }
 
 
 //returns number of elements
-unsigned int gpf_vector::size()
+int gpf_vector::size()
 {
 	return num_elements;
 }
@@ -120,35 +129,35 @@ void gpf_vector::dump_to_stdout()
 	std::cout<<std::endl;
 }
 
-void gpf_vector::insert(int pos,int val)
+void gpf_vector::insert(int pos,float val)
 {
 	if(pos >= num_elements) throw new exc_out_of_bounds(pos);	//array index out of bound
 	
-	this->num_elements ++;	//new element may be added
+	this->num_elements ++;	//assume new element inserted
 	
 	//first decide if we have to expand the memory
-	if(_capacity == num_elements)			//the array is full
+	if(_capacity == num_elements)	//if the array is full
 	{
 		try{
-			this->_capacity = (				//so recalcute the required _capacity
-							num_elements % 16 ? 
-							num_elements - (num_elements % 16) + 16 : 
-							num_elements
-						 );
-			realloc(this->row_ptr, sizeof(int) * this->_capacity);	//grow the size of the array
+			//resize the array to fit an extra element
+			this->resize(num_elements);	
 		}
 		catch(...) //catch anything
 		{
-			num_elements--;	//insertion was failed
-			throw new exc_alloc_failed();	//throw our own exception
+			//memory allocation fro extra element was failed
+			num_elements--;	
+			//throw our own exception
+			throw new exc_alloc_failed();	
 		}
 		
 	}
-
+	
+	//shift the entire array to the right starting from pos position
 	for(int i = num_elements - 2 ; i >= pos; i--)
-		this->row_ptr[i+1] = this->row_ptr[i];	//shift the entire array to the right starting from pos position
-		
-	this->row_ptr[pos] = val;	//assign the value to pos-th element
+		this->row_ptr[i+1] = this->row_ptr[i];	
+	
+	//assign the value to pos-th element
+	this->row_ptr[pos] = val;	
 }
 
 void gpf_vector::rm(int pos)
@@ -158,32 +167,20 @@ void gpf_vector::rm(int pos)
 	
 	if(num_elements <= 16) 
 	{	
+		//array size is less than one paragraph so just decrement the number of elements
 		for(int i = pos + 1 ; i < num_elements ; i++)
 			this->row_ptr[i-1] = this->row_ptr[i];	//shift the array to left
 		
 			num_elements--;
-		
 		return;
-	}	//array size is less than one paragraph so just decrement the number of elements
+	}	
 	
 	try
 	{
 		for(int i = pos ; i < num_elements-2 ; i++)
 			this->row_ptr[i] = this->row_ptr[i+1];	//shift the array to left
 		
-		this->num_elements--;		//decrement the element count
-		
-		re_calc = (												//recalculate the space required
-					num_elements % 16 ? 
-					num_elements - (num_elements % 16) + 16 : 
-					num_elements
-				 );
-				 
-		if(re_calc < this->_capacity)			//if recalculated value is less than the _capacity
-		{
-			realloc(this->row_ptr,re_calc);	//shrink the array
-			this->_capacity = re_calc;		//update the capacity value
-		}
+		this->resize(num_elements - 1);	//resize() will shrink the array
 	}
 	catch(...) //catch anything
 	{
@@ -193,35 +190,52 @@ void gpf_vector::rm(int pos)
 
 void gpf_vector::resize(int new_size)
 {
+	//size cannot be negative
 	if(new_size < 0 ) throw new exc_invalid_operation();
-	if(new_size == 0) {free(this->row_ptr);this->row_ptr = NULL;}	//special cases
+	//proper way to empty a row
+	if(new_size == 0)
+	{
+		free(this->row_ptr);
+		this->row_ptr = NULL;
+		this->num_elements = 0;
+		this->_capacity = 0;
+		return;
+	}
 	
-	int recalc =   (												//calculate the aligned space required
+	//calculate the aligned space required
+	int recalc =   (
 						new_size % 16 ? 
 						new_size - (new_size % 16) + 16 : 
 						new_size
 					);
-					
-	if(recalc != this->_capacity)	//if the calculated space does not equal the _capacity
+	//if the calculated space does not equal the _capacity
+	//i.e. if calculated size is either larger or smaller the capacity
+	if(recalc != this->_capacity)
 	{
 		try
 		{
-			if(this->row_ptr != NULL)	//already allocated 
+			//already allocated 
+			if(this->row_ptr != NULL)	
 			{
-				realloc(this->row_ptr, sizeof(int) * recalc);	//resize the array
-				this->_capacity = recalc;		//update the capacity value
+				//resize the array
+				realloc(this->row_ptr, sizeof(float) * recalc);
+				//update the capacity value
+				this->_capacity = recalc;
 			}
-			else		//if not created yet
+			else	//if array not created yet
 			{
-				this->row_ptr = (int*) malloc(sizeof(int) * recalc);
-				this->_capacity = recalc;	//update the capacity value
+				//allocate the memory
+				this->row_ptr = (float*) malloc(sizeof(float) * recalc);
+				//update the capacity value
+				this->_capacity = recalc;	
 			}
-				
-			this->num_elements = new_size;					//update the number of elements
+			//update the number of elements
+			this->num_elements = new_size;
 		}
 		catch(...)
 		{
-			throw new exc_alloc_failed();	//throw our exception
+			//something went wrong
+			throw new exc_alloc_failed();	
 		}
 	}
 }
@@ -233,34 +247,10 @@ int gpf_vector::capacity()
 
 void gpf_vector::push_back(int val)
 {
-	num_elements++;			//increment the number of elements
-	int re_calc = (												//recalculate the space required
-					num_elements % 16 ? 
-					num_elements - (num_elements % 16) + 16 : 
-					num_elements
-				  );
-	
-	if(re_calc > _capacity)
-	{
-		try
-		{
-			if(this->row_ptr == NULL)	//not allocated yet
-			{
-				this->row_ptr = (int*) malloc(sizeof(int) * re_calc);	//allocate the array
-				this->_capacity = re_calc;		//update the capacity value
-			}
-			else
-			{
-				realloc(this->row_ptr , sizeof(int) * re_calc);	//expand the array
-				this->_capacity = re_calc;		//update the capacity
-			}
-		}
-		catch(...)
-		{
-			throw new exc_alloc_failed();	//throw an allocation failed exception
-		}
-	}
-	this->row_ptr[num_elements-1] = val;	//append the value to the end of the array
+	//resize the array to fit one more element
+	resize(num_elements + 1);
+	//append the value to the end of the array
+	this->row_ptr[num_elements-1] = val;
 }
 
 bool gpf_vector::empty()
@@ -268,23 +258,27 @@ bool gpf_vector::empty()
 	return (!this->num_elements == 0);
 }
 
-int gpf_vector::pop_back()
+float gpf_vector::pop_back()
 {
 	int ret;
 	
-	if(num_elements == 0) throw new exc_invalid_operation();		//nothing to pop
-	if(num_elements <= 16) return this->row_ptr[num_elements--];	//no need to resize
-	
-	ret = this->row_ptr[num_elements--];	//store return value
-	this->resize(num_elements);				//may shrink
-	return ret;								//return
+	//nothing to pop
+	if(num_elements == 0) throw new exc_invalid_operation();
+	//no need to resize
+	if(num_elements <= 16) return this->row_ptr[num_elements--];
+	//store return value
+	ret = this->row_ptr[num_elements--];
+	//may shrink
+	this->resize(num_elements);
+	//return
+	return ret;
 }
 
-int gpf_vector::find(int val)
+int gpf_vector::find(float val)
 {
 	for(int i = 0 ; i < this->size() ; i++)
-		if(row_ptr[i] == val) return i;		//if data found return index
-	return -1;
+		if(row_ptr[i] == val) return i;	//if data found return index
+	return -1;	//else return -1
 }
 
 

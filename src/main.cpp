@@ -9,15 +9,12 @@ using namespace gpf;
 
 int main()
 {
+/*
 	directed_graph dir(5);
 	
 	
-	dir.add_vertex(12);
-	dir.rm_vertex(12);
-	
-	for(int i = 0 ; i < dir.num_vertices() ; i++)
-		for(int j = 0 ; j < dir.num_vertices() ; j++)
-			dir[i][j] = 1;
+	dir.add_vertex	(12);
+	dir.rm_vertex	(12);
 	
 	dir.dump_to_stdout();
 	
@@ -26,7 +23,22 @@ int main()
 	if(!dir.is_complete())
 		cout<<"The graph is not a complete graph"<<endl;
 	else cout<<"The graph is connected"<<endl;
+*/
+	simple_matrix simp(3);
+	
+	for(int i = 0 ; i < simp.get_degree() ; i++)
+		for(int j = 0; j < simp.get_degree() ; j++ )
+			simp[i][j] = 0.89;
+	
+	cout<<simp;
 	
 	return 0;
 	
 }
+
+
+
+
+
+
+

@@ -5,27 +5,48 @@
 namespace gpf
 {
 
+std::ostream& operator<<(std::ostream& out, simple_matrix& mat)
+{
+	//nothing to print
+	if(mat.degree == 0) {out<<std::endl<<"<EMPTY>"<<std::endl; return out;} 
+	
+	for(int i = 0 ; i < mat.degree ; i++)
+	{
+		for(int j = 0 ; j < mat.degree ; j++)
+		{
+			out<<mat[i][j]<<" ";
+		}
+		out<<std::endl;
+	}
+	return out;
+}
+
+
 simple_matrix::simple_matrix()
 {
+	//by default the matrix is empty
 	this->degree = 0;
 }
 
 //The simple_matrix constructor
-simple_matrix::simple_matrix(unsigned int degree)
+simple_matrix::simple_matrix(int degree)
 {
+	//degree cannot be negative
+	if(degree < 0) throw new exc_invalid_operation();
 	try
 	{
-		this->degree = degree;					//store the degree
-		mat_rows = (gpf_vector**)malloc( sizeof(gpf_vector*) * degree);		//allocate degree number of row pointers for ease of shifting
+		//store the degree for future reference
+		this->degree = degree;
+		//allocate degree number of row pointers
+		mat_rows = (gpf_vector**)malloc( sizeof(gpf_vector*) * degree);
 		
 		for(int i = 0; i < degree ; i++)
-		{
-			mat_rows[i] = new gpf_vector(degree);	//allocate the arrays to each pointers
-		}
+			mat_rows[i] = new gpf_vector(degree);	//allocate the arrays
 	}
 	catch(...)
 	{
-		throw new exc_alloc_failed();	//rethrow our exception
+		//something went wrong so rethrow our exception
+		throw new exc_alloc_failed();
 		this->degree = 0;
 	}
 }
@@ -33,14 +54,17 @@ simple_matrix::simple_matrix(unsigned int degree)
 //The destructor
 simple_matrix::~simple_matrix()
 {
-	if(degree != 0) //we do have something to delete
+	//if we do have something to delete
+	if(degree != 0)
 	{
+		//first delete the inner vectors
 		for(int i = 0; i < degree ; i++)
 		{
 			std::cout<<"Deleting matrix row number "<<i<<std::endl;
 			delete mat_rows[i];	//delete each rows 
 		}
-		free( mat_rows );			//mat_rows was allocated using malloc so free it
+		//then delete the container
+		free( mat_rows );
 #ifdef DEBUG
 		std::cout<<std::endl<<"simple_matrix::~simple_matrix() >> Freed memory mat_rows[]"<<std::endl;
 #endif
@@ -52,6 +76,7 @@ gpf_vector& simple_matrix::operator[](int suffix) const
 {
 	if(suffix <= (degree -1))
 	{
+		//returns the suffix-th row (gpf_vector)
 		return *(mat_rows[suffix]);
 	} else throw new exc_out_of_bounds(suffix);
 }
@@ -65,40 +90,51 @@ void simple_matrix::dump_to_stdout()
 		(*this)[i].dump_to_stdout();		//mat[i] is gpf_vector again
 }
 
+//adds a new row and a new column to the matrix at the extremes
 void simple_matrix::add_degree()
 {	
 	gpf_vector** temp = 0;	//temporary pointer
 	
 	for(int i = 0 ; i < degree ; i++)
 	{
-		(*this)[i].push_back(0);	//add a column of zeroes to the matrix
+		//add a column of zeroes to the matrix
+		(*this)[i].push_back(0);
 	}	
-
-	temp =(gpf_vector**) malloc(sizeof(gpf_vector*)*(degree+1));  //allocate space for our new matrix (with one more row)
 	
-	for(int i = 0 ; i < degree ; i++) temp[i] = mat_rows[i];	  //copy previous matrix rows
-	
-	free(mat_rows);		//free previous matrix
-
-	temp[degree] = new gpf_vector(degree + 1);	//create the last row
-
-	mat_rows = temp;	//update the pointer
-    degree++;			//update degree
+	//allocate space for our new matrix (with one more row)
+	temp =(gpf_vector**) malloc(sizeof(gpf_vector*)*(degree+1)); 
+	//copy previous matrix rows
+	for(int i = 0 ; i < degree ; i++) temp[i] = mat_rows[i];
+	//free previous matrix
+	free(mat_rows);
+	//create the last row (by default 0 initialized)
+	temp[degree] = new gpf_vector(degree + 1);
+	//update the pointer
+	mat_rows = temp;
+	//update degree
+    degree++;
 }
-
+//removes a row and a column specified by index
 void simple_matrix::rm_rowcol(int index)
 {
-	if(index >= degree) throw new exc_out_of_bounds(index);	//throw array index out of range
+	//throw array index out of range
+	if(index >= degree) throw new exc_out_of_bounds(index);
+	//delete the memory associated with the array
+	delete mat_rows[index];
 	
-	delete mat_rows[index];		//delete the memory associated with the array
-	
-	for(int i = index ; i < degree - 1 ; i++ )	//shift the array
+	//shift the array : to fill the gap due to a row being deleted
+	for(int i = index ; i < degree - 1 ; i++ )
 		mat_rows[i] = mat_rows[i+1];
-		
+	//remove column entries
 	for(int i = 0 ; i < degree ; i++ )
-		mat_rows[i]->rm(index);			//remove column entries
-	
-	degree--;	//since now one row and one column is removed reduce the degree value
+		mat_rows[i]->rm(index);
+	//since now one row and one column is removed reduce the degree value
+	degree--;
+}
+
+bool simple_matrix::empty()
+{
+	return (this->degree == 0);
 }
 
 }

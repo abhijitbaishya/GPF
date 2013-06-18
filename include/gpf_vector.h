@@ -17,34 +17,54 @@ class gpf_vector
 {
 	private:
 	//member variables
-		int*			row_ptr;			//actual row pointer
-		unsigned int 	num_elements;		//number of elements
-		unsigned int 	_capacity;			//capacity
-	public:
-	//constructors and destructors
-		virtual ~gpf_vector		();								//The destructor
+	//actual row pointer
+		float*			row_ptr;
+	//number of elements currently present
+		int 			num_elements;
+	//capacity of the vector
+		int 			_capacity;
 
-		gpf_vector				();								//creates empty row
-		gpf_vector				(gpf_vector& copy);				//The copy constructor
-		gpf_vector				(unsigned int num_elements);	//The constructor default size increment is 16 bytes or a paragraph	
+
+	public:
+	//the destructor
+		virtual ~gpf_vector		();
+	//deafault constructor : creates an empty row
+		gpf_vector				();
+	//The copy constructor
+		gpf_vector				(gpf_vector& copy);
+	//The constructor default size increment is 16 units
+		gpf_vector				(int num_elements);
 	
 	public:
 	//member functions
-		void 			rm					(int pos);									//remove an elements from pos position
-		unsigned int 	size				();											//returns no of elements in this row (may be usefull for sparse matrix)
-		int 			find				(int val);									//returns the index if val is found otherwise returns -1
-		bool			empty				();											//returns true if the array is empty
-		void			resize				(int new_size);								//resize the array (here size is no of elements)
-		void 			insert				(int pos,int val);							//insert an element
-		int 			pop_back			();											//removes an elements from the back of the row
-		int 			capacity			();											//returns the capacity value
-		void			push_back			(int val);									//adds an element at the end of the row
-		void			dump_to_stdout		();											//dumps the row to stdout
+	
+	//remove an elements from pos position
+		void 			rm					(int pos);
+	//returns no of elements in this row (may be usefull for sparse matrix)
+		int 			size				();
+	//returns the index if val is found otherwise returns -1
+		int 			find				(float val);
+	//returns true if the array is empty
+		bool			empty				();
+	//resize the array (here size is no of elements)
+		void			resize				(int new_size);
+	//insert an element
+		void 			insert				(int pos,float val);
+	//removes an elements from the back of the row
+		float 			pop_back			();
+	//returns the capacity value
+		int 			capacity			();
+	//adds an element at the end of the row
+		void			push_back			(int val);
+	//dumps the row to stdout
+		void			dump_to_stdout		();
 		
 	//overloaded operators
-		int&  			operator[]			(int suffix) throw (exc_out_of_bounds*);	//returns an element from the gpf_vector given an index
-																						//it also handles bound checking
-		gpf_vector&		operator=			(gpf_vector& row);							//The assignment operator
+	
+	//returns an element from the gpf_vector given an index it also handles bound checking
+		float& 			operator[]			(int suffix) throw (exc_out_of_bounds*);
+	//The assignment operator : assigning a vector will overwrite the original one
+		gpf_vector&		operator=			(gpf_vector& row);
 };
 
 }

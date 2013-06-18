@@ -1,12 +1,20 @@
-CC=gcc				#The c compiler
-CPP=g++				#The cpp compiler
-LIB_DIR=lib			#The library directory
-BIN_DIR=bin	$ 		#The binary directory
-CPP_FLAGS=-DDEBUG -g
+#The c compiler
+CC=gcc
+#The cpp compiler
+CPP=g++
+#The library directory
+LIB_DIR=lib
+#The binary directory
+BIN_DIR=bin
+#c++ compiler flags
+CPP_FLAGS=-g
+#source file list
 SRC_LIST=directed_graph.cpp gpf_vector.cpp graph_base.cpp simple_matrix.cpp main.cpp
 
-vpath %.cpp src		#search here for source files
-vpath %.h   include	#search here for include files
+#search here for source file
+vpath %.cpp src
+#search here for include files
+vpath %.h   include
 
 app.exe : directed_graph.o graph_base.o gpf_vector.o simple_matrix.o main.o
 	$(CPP) $(CPP_FLAGS) -o app.exe $^

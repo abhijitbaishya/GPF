@@ -37,7 +37,7 @@ class directed_graph:public graph_base,public simple_matrix
 		//distance between two vertex
 		int  distance_between	(int src_lebel,int dst_lebel);
 		
-	friend	std::ostream&	operator<<(std::ostream& out,directed_graph& graph);	//later
+		friend	std::ostream&	operator<<(std::ostream& out,directed_graph& graph);	//later
 };
 
 }
