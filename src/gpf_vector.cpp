@@ -67,11 +67,13 @@ gpf_vector::~gpf_vector()
 
 
 //The copy constructor
-gpf_vector::gpf_vector(gpf_vector& row)
+gpf_vector::gpf_vector(const gpf_vector& row)
 {
 #ifdef DEBUG
 	std::cout<<"Copy ctor invoked"<<std::endl;
 #endif
+	gpf_vector& temp = const_cast<gpf_vector&>(row);
+	
 	if(row.num_elements == 0) this->resize(0);	//if input array is empty then make this empty too
 	if(row.num_elements != 0)	//if input is not an empty row
 	{
@@ -79,11 +81,11 @@ gpf_vector::gpf_vector(gpf_vector& row)
 	}
 	
 	for(int i = 0; i < row.num_elements ; i++ )
-		row_ptr[i] = row[i];				//copy all elements
-	this->num_elements = row.num_elements;	//copy other states
+		row_ptr[i] = temp[i];				//copy all elements
+	this->num_elements = temp.num_elements;	//copy other states
 }
 
-gpf_vector&	gpf_vector::operator=(gpf_vector& row)
+gpf_vector&	gpf_vector::operator=(const gpf_vector& row)
 {
 #ifdef DEBUG
 	std::cout<<"Assignment operator invoked"<<std::endl;
@@ -284,6 +286,16 @@ int gpf_vector::find(float val)
 	return -1;	//else return -1
 }
 
+std::ostream& operator<<(std::ostream& out, gpf_vector& vec)
+{
+	if(vec.num_elements == 0) { out<<"<EMPTY>"<<std::endl; return out; }
+	
+	for(int i = 0; i < vec.num_elements ; i++)
+		out<<vec.row_ptr[i]<<" ";
+	out<<std::endl;
+	
+	return out;
+}
 
 }
 

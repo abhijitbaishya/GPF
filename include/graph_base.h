@@ -35,6 +35,8 @@ class vertex_set
 		bool	empty		();
 	//size returns the size of the vertex set
 		int 	size		();
+	//assignment operator
+		vertex_set&		operator=(const vertex_set& copy);
 	
 };
 

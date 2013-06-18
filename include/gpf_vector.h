@@ -31,7 +31,7 @@ class gpf_vector
 	//deafault constructor : creates an empty row
 		gpf_vector				();
 	//The copy constructor
-		gpf_vector				(gpf_vector& copy);
+		gpf_vector				(const gpf_vector& copy);
 	//The constructor default size increment is 16 units
 		gpf_vector				(int num_elements);
 	
@@ -64,8 +64,13 @@ class gpf_vector
 	//returns an element from the gpf_vector given an index it also handles bound checking
 		float& 			operator[]			(int suffix) throw (exc_out_of_bounds*);
 	//The assignment operator : assigning a vector will overwrite the original one
-		gpf_vector&		operator=			(gpf_vector& row);
+		gpf_vector&		operator=			(const gpf_vector& row);
+	//inserter overloaded
+	friend std::ostream& operator<<(std::ostream& out, gpf_vector& vec);
 };
+
+//inserter overloaded
+std::ostream& operator<<(std::ostream& out, gpf_vector& vec);
 
 }
 #endif

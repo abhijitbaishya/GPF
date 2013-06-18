@@ -25,7 +25,7 @@ std::ostream&	operator<<(std::ostream& out,directed_graph& graph)
 }
 
 
-directed_graph::directed_graph():vertices()
+directed_graph::directed_graph():vertices(0)
 {
 	ref_index = 0;	//by default start index is 0
 }
@@ -37,9 +37,10 @@ directed_graph::directed_graph(int num_vertices):
 	ref_index = 0;
 }
 
-directed_graph::directed_graph(const directed_graph& copy):vertices(copy.num_vertices)
+directed_graph::directed_graph(const directed_graph& copy)
 {
-	//to be done later
+	//copy the vertex set
+	this->vertices = copy.vertices;
 }
 
 bool directed_graph::empty()

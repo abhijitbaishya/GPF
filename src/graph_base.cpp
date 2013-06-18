@@ -75,6 +75,12 @@ int vertex_set::size()
 	return lebels.size();	//returns the size of the vertex array
 }
 
+vertex_set& vertex_set::operator=(const vertex_set& copy)
+{
+	this->lebels = copy.lebels;
+	return (*this);
+}
+
 }
 
 

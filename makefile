@@ -7,20 +7,48 @@ LIB_DIR=lib
 #The binary directory
 BIN_DIR=bin
 #c++ compiler flags
-CPP_FLAGS=-g -lm
+CPP_FLAGS=-g -c -lm -DDEBUG
 #source file list
-SRC_LIST=directed_graph.cpp gpf_vector.cpp graph_base.cpp simple_matrix.cpp main.cpp
+SRC_LIST=directed_graph.cpp gpf_vector.cpp graph_base.cpp simple_matrix.cpp
+#Frame work objects
+FW_OBJ=directed_graph.o gpf_vector.o graph_base.o simple_matrix.o
 
 #search here for source file
 vpath %.cpp src
 #search here for include files
 vpath %.h   include
 
-app.exe : directed_graph.o graph_base.o gpf_vector.o simple_matrix.o main.o
-	$(CPP) $(CPP_FLAGS) -o app.exe $^
+app : MAIN_OBJ FRAMEWORK_OBJ
+	$(CPP) -o app main.o $(FW_OBJ)
 
-matrix_base.o simple_matrix.o main.o: $(SRC_LIST)
-	$(CPP) $(CPP_FLAGS) -c  $^
+MAIN_OBJ : main.cpp
+	$(CPP) -c $^
+
+#makes the vector class test application
+vec : FRAMEWORK_OBJ test/gpf_vector_test.cpp
+	$(CPP) -c test/gpf_vector_test.cpp
+	$(CPP) -o vec gpf_vector_test.o $(FW_OBJ)
+
+#makes the simple matrix test
+simp : FRAMEWORK_OBJ test/simple_matrix_test.cpp
+	$(CPP) -c test/simple_matrix_test.cpp
+	$(CPP) -o simp $(FW_OBJ) simple_matrix_test.o
+
+#makes the directed graph test
+dir : FRAMEWORK_OBJ test/directed_graph_test.cpp
+	$(CPP) -c test/directed_graph_test.cpp
+	$(CPP) -o dir directed_graph_test.o $(FW_OBJ)
+	
+#make all the framework objects
+FRAMEWORK_OBJ : $(SRC_LIST)
+	$(CPP) $(CPP_FLAGS)  $^	
+
+#makes all test and app
+all : app vec simp dir
+
 clean:
-	@rm *.o *.exe 
-	@echo "Cleaned!"
+	@rm -f *.o *.exe 
+	@echo
+	@echo "All binary files cleaned!"
+	@echo "-------------------------"
+	

@@ -23,7 +23,7 @@ int main()
 	if(!dir.is_complete())
 		cout<<"The graph is not a complete graph"<<endl;
 	else cout<<"The graph is connected"<<endl;
-*/
+*//*
 	simple_matrix simp(3);
 	directed_graph dir(5);
 	
@@ -36,6 +36,16 @@ int main()
 			simp[i][j] = 0.89;
 	
 	cout<<simp;
+*/
+
+	gpf_vector vec(5);
+	
+	gpf_vector vec2(vec);
+	
+	cout<<vec<<vec2;
+	
+	cout<<vec.size()<<" "<<vec2.size()<<endl;
+	cout<<vec.capacity()<<" "<<vec2.capacity()<<endl;
 	
 	return 0;
 	
