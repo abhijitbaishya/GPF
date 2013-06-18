@@ -12,9 +12,9 @@ int main()
 	directed_graph dir(5);
 	directed_graph d;
 	
-	dir = d;
+	cin>>d;
 	
-	cout<<dir<<endl;
+	cout<<d;
 		
 	return 0;
 	

@@ -66,7 +66,19 @@ class graph_base
 		virtual bool is_edge		(int lebel) = 0;	//if an edge exists between ref vertex and lebel
 		virtual bool is_edge		(int l1,int l2) = 0; //if an edge exists between l1 and l2
 		*/
-		
+	//returns the lebel of vertex with maximum in degree (lowest index if there are collisions)
+		virtual int  max_indegree	() = 0;
+	//returns the lebel of the vertex with minimum in degree (lowest index if there are collision)
+		virtual int  min_indegree	() = 0;
+	//returns the lebel of vertex with maximum out degree (lowest index if there are collision)
+		virtual int  max_outdegree	() = 0;
+	//returns the lebel of the vertex with maximum out (lowest index if there are collision)
+		virtual int  min_outdegree	() = 0;
+	//returns the in degree of the vertex	
+		virtual int  indegree_of		(int lebel) = 0;
+	//returns the out degree of the vertex
+		virtual int  outdegree_of	(int lebel) = 0;
+	
 	//Start vertex is required for some algorithms
 		virtual void set_ref_vertex	(int lebel) = 0;
 	//returns the distance between two vertices

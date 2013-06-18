@@ -1,24 +1,117 @@
 #include 	"../include/directed_graph.h"
-
+#include	<stdio.h>
 namespace gpf
 {
 std::istream& operator>>(std::istream& in, directed_graph& graph)
 {
-	return in;
+	int num_vertex;
+	int temp_lebel;
+
+	std::cout<<std::endl<<"[GPATH INPUT :]"<<std::endl
+			 <<"Number of vertices : ";
+	in>>num_vertex;
+	
+	for(int i = 0 ; i < num_vertex ; i++)
+	{	
+		//try to get
+		while(1)
+		{
+			try
+			{
+			//prompt users
+				std::cout<<"Enter the lebel for "<<i<<"-th vertex :";
+			//store the temp_lebel
+				in>>temp_lebel;
+			//try to add the vertex to the graph
+				graph.add_vertex(temp_lebel);
+			//if everything goes well break
+				break;
+			}catch(...)
+			{
+			//something went wrong so alert user
+				std::cout<<"The lebel already exists, try again!"<<std::endl;
+			//we did not break here so while loop will not terminate here
+			}
+		}
+	}
+	std::cout<<std::endl<<"Enter the adjacency matrix :"<<std::endl<<std::endl;
+	
+	for(int  i = 0 ; i < num_vertex ; i++)
+		for(int j = 0 ; j < num_vertex ; j++)
+			in>>graph[i][j];
+			
+	std::cout<<"[END OF INPUT]"<<std::endl<<std::endl;
 }
 std::ostream&	operator<<(std::ostream& out,directed_graph& graph)
 {
-	//more formatted out put to be done later
-	if(graph.empty()) { out<<std::endl<<"<EMPTY>"<<std::endl; return out; }
+	char num_digit[10];
 	
+	if(graph.empty()) { out<<std::endl<<"<EMPTY>"<<std::endl; return out; }
+
+	//get the degree of the graph
 	int deg = graph.get_mat_degree();
+	
+	int max_lebel = 0, max_edge = 0, max_val;
+	
+	for(int i = 0 ; i < graph.vertices.size() ; i++)
+		if(graph.vertices.lebel_of(i) > max_lebel) max_lebel = graph.vertices.lebel_of(i);
+	
+	for(int i = 0 ; i < deg ; i++)
+		for(int j = 0 ; j < deg ; j++)
+			if(graph[i][j] > max_edge) max_edge = graph[i][j];
+			
+	max_val = max_lebel > max_edge ? max_lebel : max_edge;
+	
+	sprintf(num_digit,"%d",max_val);
+	
+	int space = 1+strlen(num_digit);
+	
+	
+	out<<std::endl;
+	for(int i = 0 ; i <= deg ; i++)
+		for(int k = space ; k >= 0 ; k--)
+				(k == 0) ? out<<'+' : out<<'-';
+				
+	out<<std::endl;
+	
+	out.fill(' ');
+	out.width(space);
+	out<<'#';
+	out<<'|';
+	
 	
 	for(int i = 0 ; i < deg ; i++)
 	{
+		out.fill(' ');
+		out.width(space);
+		out<<graph.vertices.lebel_of(i);
+		out<<'|';
+	}
+	out<<std::endl;
+	for(int i = 0 ; i <= deg ; i++)
+		for(int k = space ; k >= 0 ; k--)
+				(k == 0) ? out<<'+' : out<<'-';
+				
+	out<<std::endl;
+	
+	for(int i = 0 ; i < deg ; i++)
+	{
+		out.fill(' ');
+		out.width(space);
+		out<<graph.vertices.lebel_of(i);
+		out<<'|';
 		for(int j = 0 ; j < deg ; j++)
 		{
-			out<<graph[i][j]<<" ";
+			out.fill(' ');
+			out.width(space);
+			out<<graph[i][j];
+			out<<'|';
 		}
+		out<<std::endl;
+		for(int i = 0 ; i <= deg ; i++)
+			for(int k = space ; k >= 0 ; k--)
+				(k == 0) ? out<<'+' : out<<'-';
+				
 		out<<std::endl;
 	}
 	return out;
@@ -180,7 +273,7 @@ directed_graph& directed_graph::operator=(const directed_graph& graph)
 	{
 	//copy the vertex set
 		this->vertices = graph.vertices;
-	//add a row+col at a time until it is equal in size with input graph
+	//add a row+colm at a time until it is equal in size with input graph
 		for(int i = 0 ; i < src_deg ; i++)
 			this->add_degree();
 	//now that sizes are same copy each row of graph using the [] operator
@@ -201,6 +294,148 @@ void directed_graph::clear()
 //now clear the vertices
 	this->vertices.clear();
 }
+
+int directed_graph::max_indegree()
+{
+	int max = 0 , temp = 0 , index = -1;
+	int deg = this->get_mat_degree();
+	
+	//search from extream righ column
+	for( int colm = deg -1 ; colm >= 0 ; colm++)
+	{
+		temp = 0;	//to hold the no of incomming connections
+		for( int row = 0 ; row < deg ; row++)
+		{
+			//ignore all sel loops
+			if(row == colm) continue; 
+			//increment temp if there is a connection from j to i (incomming)
+			//notice column is fixed for this loop because our matrix is row major ().
+			temp += ((*this)[row][colm] > 0 ) ? 1 : 0;
+		}
+		//if temp (incomming) is greater than the previous max store the corresponding index else do nothing
+		index = temp > max ? colm : index;
+		//update the new max (number of incomming connections)
+		max	  = temp > max ? temp : max;
+	}
+	
+	return (index == -1 ? index : vertices.lebel_of(index));
+}
+
+int directed_graph::min_indegree()
+{
+	int min = 0 , temp = 0 , index = -1;
+	int deg = this->get_mat_degree();
+	
+	//search from extream righ column
+	for( int colm = deg -1 ; colm >= 0 ; colm++)
+	{
+		temp = 0;	//to hold the no of incomming connections
+		for( int row = 0 ; row < deg ; row++)
+		{
+			//ignore all sel loops
+			if(row == colm) continue; 
+			//increment temp if there is a connection from j to i (incomming)
+			//notice column is fixed for this loop because our matrix is row major ().
+			temp += ((*this)[row][colm] > 0 ) ? 1 : 0;
+		}
+		//if temp (incomming) is greater than the previous min store the corresponding index else do nothing
+		index = temp < min ? colm : index;
+		//update the new min (number of incomming connections)
+		min	  = temp < min ? temp : min;
+	}
+	
+	return (index == -1 ? index : vertices.lebel_of(index));
+}
+
+int directed_graph::max_outdegree()
+{
+	int max = 0 , temp = 0 , index = -1;
+	int deg = this->get_mat_degree();
+	
+	//search from bottom row
+	for( int row = deg -1 ; row >= 0 ; row++)
+	{
+		temp = 0;	//to hold the no of incomming connections
+		for( int colm = 0 ; colm < deg ; colm++)
+		{
+			//ignore all sel loops
+			if(row == colm) continue; 
+			//increment temp if there is a connection from j to i (incomming)
+			//notice column is fixed for this loop because our matrix is row major ().
+			temp += ((*this)[row][colm] > 0 ) ? 1 : 0;
+		}
+		//if temp (incomming) is greater than the previous max store the corresponding index else do nothing
+		index = temp > max ? row : index;
+		//update the new max (number of incomming connections)
+		max	  = temp > max ? temp : max;
+	}
+	
+	return (index == -1 ? index : vertices.lebel_of(index));
+}
+
+int directed_graph::min_outdegree()
+{
+	int min = 0 , temp = 0 , index = -1;
+	int deg = this->get_mat_degree();
+	
+	//search from bottom row
+	for( int row = deg -1 ; row >= 0 ; row++)
+	{
+		temp = 0;	//to hold the no of incomming connections
+		for( int colm = 0 ; colm < deg ; colm++)
+		{
+			//ignore all sel loops
+			if(row == colm) continue; 
+			//increment temp if there is a connection from j to i (incomming)
+			//notice column is fixed for this loop because our matrix is row major ().
+			temp += ((*this)[row][colm] > 0 ) ? 1 : 0;
+		}
+		//if temp (incomming) is greater than the previous min store the corresponding index else do nothing
+		index = temp < min ? row : index;
+		//update the new min (number of incomming connections)
+		min	  = temp < min ? temp : min;
+	}
+	
+	return (index == -1 ? index : vertices.lebel_of(index));
+}
+
+int directed_graph::indegree_of(int lebel)
+{
+	//get the degree of this matrix
+	int deg   = this->get_mat_degree();
+	//find the index of this lebel
+	int index = vertices.index_of(lebel);
+	//return val
+	int ret = 0;
+	
+	if(index == -1) return -1;
+	
+	//increment ret if we found an incomming connection
+	for(int i = 0 ; i < deg ; i++)
+		ret += (*this)[i][index] > 0 ? 1 : 0;
+	
+	return ret;
+}
+
+int directed_graph::outdegree_of(int lebel)
+{
+	//get the degree of this matrix
+	int deg   = this->get_mat_degree();
+	//find the index of this lebel
+	int index = vertices.index_of(lebel);
+	//return val
+	int ret = 0;
+	
+	//the lebel was not found
+	if(index == -1) return -1;
+	
+	//increment ret if we found an outgoing connection
+	for(int i = 0 ; i < deg ; i++)
+		ret += (*this)[index][i] > 0 ? 1 : 0;
+	
+	return ret;
+}
+
 
 }
 

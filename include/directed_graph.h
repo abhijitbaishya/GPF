@@ -8,7 +8,11 @@ namespace gpf
 
 class directed_graph:public graph_base,public simple_matrix
 {
-	public:
+	//the iterator class can access the private members
+	friend class dfs_iterator;
+	friend class bfs_iterator;
+	
+	private:
 		vertex_set	vertices;	//set of vertices
 		int 		ref_index;	//used to store the reference vertex index (may be used for some algorithms)
 	public:
@@ -44,6 +48,19 @@ class directed_graph:public graph_base,public simple_matrix
 		int  distance_from		(int lebel) const;
 	//distance between two vertex
 		int  distance_between	(int src_lebel,int dst_lebel) const;
+		
+	//returns the lebel of vertex with maximum in degree (lowest index if there are collisions), returns -1 if null graph
+		int  max_indegree	();
+	//returns the lebel of the vertex with minimum in degree (lowest index if there are collision)
+		int  min_indegree	();
+	//returns the lebel of vertex with maximum out degree (lowest index if there are collision)
+		int  max_outdegree	();
+	//returns the lebel of the vertex with maximum out (lowest index if there are collision)
+		int  min_outdegree	();
+	//returns the in degree of the vertex	
+		int  indegree_of		(int lebel);
+	//returns the out degree of the vertex
+		int  outdegree_of	(int lebel);
 		
 	//assignment operator overloaded returns a persistant copy
 		directed_graph&	operator=(const directed_graph& graph);
