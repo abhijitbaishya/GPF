@@ -4,7 +4,7 @@ namespace gpf
 {
 std::istream& operator>>(std::istream& in, directed_graph& graph)
 {
-	
+	return in;
 }
 std::ostream&	operator<<(std::ostream& out,directed_graph& graph)
 {
@@ -157,6 +157,11 @@ int directed_graph::num_edges()
 gpf_vector& directed_graph::operator[] (int suffix)
 {
 	return simple_matrix::operator[](suffix);
+}
+
+directed_graph& directed_graph::operator=(directed_graph& graph)
+{
+	
 }
 
 }
