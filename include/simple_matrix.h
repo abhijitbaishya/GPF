@@ -31,15 +31,17 @@ class simple_matrix:public matrix_base
 		simple_matrix(const simple_matrix& copy);
 	
 	//dumps the matrix to stdout
-		int 				get_mat_degree		()	{return degree;}
+		int 				get_mat_degree		() const {return degree;}
 	//returns true if the matrix is not yet created
-		bool				empty			();
+		bool				empty			() const;
 	//returns a gpf_vector object
 	//Returns a matrix row which also overloads a [] operator
 		gpf_vector& 		operator[]		(int suffix) const;
 	//assignment operator
 		simple_matrix& 		operator=		(const simple_matrix& mat);
 	protected:
+	//makes this matrix empty
+		void 				clear			();
 	//rm_degree function deletes the last column and the last row
 		void				rm_degree		();
 	//adds a new null column and null row to the matrix (useful for vertex add operation)

@@ -41,11 +41,13 @@ class gpf_vector
 	//remove an elements from pos position
 		void 			rm					(int pos);
 	//returns no of elements in this row (may be usefull for sparse matrix)
-		int 			size				();
+		int 			size				() const;
 	//returns the index if val is found otherwise returns -1
-		int 			find				(float val);
+		int 			find				(float val) const;
 	//returns true if the array is empty
-		bool			empty				();
+		bool			empty				() const;
+	//clear method makes an array empty
+		void			clear				();
 	//resize the array (here size is no of elements)
 		void			resize				(int new_size);
 	//insert an element
@@ -53,16 +55,16 @@ class gpf_vector
 	//removes an elements from the back of the row
 		float 			pop_back			();
 	//returns the capacity value
-		int 			capacity			();
+		int 			capacity			() const;
 	//adds an element at the end of the row
 		void			push_back			(int val);
 	//dumps the row to stdout
-		void			dump_to_stdout		();
+		void			dump_to_stdout		() const;
 		
 	//overloaded operators
 	
 	//returns an element from the gpf_vector given an index it also handles bound checking
-		float& 			operator[]			(int suffix) throw (exc_out_of_bounds*);
+		float& 			operator[]			(int suffix)const throw (exc_out_of_bounds*);
 	//The assignment operator : assigning a vector will overwrite the original one
 		gpf_vector&		operator=			(const gpf_vector& row);
 	//inserter overloaded

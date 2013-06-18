@@ -24,6 +24,10 @@ std::ostream&	operator<<(std::ostream& out,directed_graph& graph)
 	return out;
 }
 
+directed_graph::~directed_graph()
+{
+	
+}
 
 directed_graph::directed_graph():vertices(0)
 {
@@ -43,14 +47,14 @@ directed_graph::directed_graph(const directed_graph& copy)
 	this->vertices = copy.vertices;
 }
 
-bool directed_graph::empty()
+bool directed_graph::empty() const
 {
 	//if there are no vertices then the graph is empty
 	return (!vertices.empty());
 }
 
 //returns true if null graph
-bool directed_graph::is_null()
+bool directed_graph::is_null() const
 {
 	int deg = get_mat_degree();	//get the degree of the edge matrix
 	int i , j;
@@ -64,8 +68,8 @@ bool directed_graph::is_null()
 	
 }
 
-bool directed_graph::is_directed() { return true; }
-bool directed_graph::is_undirected() { return false; }
+bool directed_graph::is_directed() const { return true; }
+bool directed_graph::is_undirected() const { return false; }
 
 void directed_graph::set_ref_vertex(int lebel)
 {
@@ -74,9 +78,67 @@ void directed_graph::set_ref_vertex(int lebel)
 	this->ref_index = i;	//store for future use
 }
 
-int directed_graph::num_vertices()
+int directed_graph::num_vertices() const
 {
 	return vertices.size();	//erturns the number of vertices
+}
+
+bool directed_graph::is_complete() const
+{
+	int deg = get_mat_degree();	//get the degree of the incidence matrix
+	for(int i = 0 ; i < deg ; i++)
+		for(int j = 0 ; j < deg ; j++)
+		{
+			if( i == j) continue;	//ignore self loops
+			if((*this)[i][j] < 1) return false;
+		}
+	return true;	//if we did not find a disconnection then return true
+}
+
+int directed_graph::distance_to(int lebel) const
+{
+	if(	vertices.size() == 0 ||				//if start_index is out of bounds or there are no vertices 
+		ref_index >= vertices.size()) throw new exc_invalid_operation();
+	
+	int dst_index = vertices.index_of(lebel);
+	if(dst_index >= 0) return (*this)[ref_index][dst_index];	//note that distance may be 0 but may not -ve
+	else
+		return -1;		//no edge was found
+}
+
+int directed_graph::distance_from(int lebel) const
+{
+	if(	vertices.size() == 0 ||				//if start_index is out of bounds or there are no vertices 
+		ref_index >= vertices.size()) throw new exc_invalid_operation();
+		
+	int src_index = vertices.index_of(lebel);	//find the index of lebel
+	
+	if(src_index >= 0) return (*this)[src_index][ref_index];	//return the distance from src to ref
+	else return -1;	//else return -1
+}
+
+int directed_graph::distance_between(int src_lebel,int dst_lebel) const
+{
+	int src_index,dst_index;
+	
+	src_index = vertices.index_of(src_lebel);
+	dst_index = vertices.index_of(dst_lebel);
+	
+	if(src_index >= 0 && dst_index >= 0) return (*this)[src_index][dst_index];	//both lebels are valid so return distance
+																				//order of index matters in directed graphs
+	else return -1;		//else return -1										
+}
+
+int directed_graph::num_edges() const
+{
+	int num = 0;
+	int deg = this->get_mat_degree();
+	
+	for(int i = 0 ; i < deg ; i++)
+		for(int j = 0 ; j < deg ; j++)
+			if((*this)[i][j] >= 0) num++;
+			
+	return num; //return thr number of edges
 }
 
 int directed_graph::add_vertex(int lebel)
@@ -96,71 +158,28 @@ void directed_graph::rm_vertex(int lebel)
 	vertices.rm(lebel);						//delete the vertex from the vertex set
 }
 
-bool directed_graph::is_complete()
-{
-	int deg = get_mat_degree();	//get the degree of the incidence matrix
-	for(int i = 0 ; i < deg ; i++)
-		for(int j = 0 ; j < deg ; j++)
-		{
-			if( i == j) continue;	//ignore self loops
-			if((*this)[i][j] < 1) return false;
-		}
-	return true;	//if we did not find a disconnection then return true
-}
-
-int directed_graph::distance_to(int lebel)
-{
-	if(	vertices.size() == 0 ||				//if start_index is out of bounds or there are no vertices 
-		ref_index >= vertices.size()) throw new exc_invalid_operation();
-	
-	int dst_index = vertices.index_of(lebel);
-	if(dst_index >= 0) return (*this)[ref_index][dst_index];	//note that distance may be 0 but may not -ve
-	else
-		return -1;		//no edge was found
-}
-
-int directed_graph::distance_from(int lebel)
-{
-	if(	vertices.size() == 0 ||				//if start_index is out of bounds or there are no vertices 
-		ref_index >= vertices.size()) throw new exc_invalid_operation();
-		
-	int src_index = vertices.index_of(lebel);	//find the index of lebel
-	
-	if(src_index >= 0) return (*this)[src_index][ref_index];	//return the distance from src to ref
-	else return -1;	//else return -1
-}
-
-int directed_graph::distance_between(int src_lebel,int dst_lebel)
-{
-	int src_index,dst_index;
-	
-	src_index = vertices.index_of(src_lebel);
-	dst_index = vertices.index_of(dst_lebel);
-	
-	if(src_index >= 0 && dst_index >= 0) return (*this)[src_index][dst_index];	//both lebels are valid so return distance
-																				//order of index matters in directed graphs
-	else return -1;		//else return -1										
-}
-
-int directed_graph::num_edges()
-{
-	int num = 0;
-	int deg = this->get_mat_degree();
-	
-	for(int i = 0 ; i < deg ; i++)
-		for(int j = 0 ; j < deg ; j++)
-			if((*this)[i][j] >= 0) num++;
-			
-	return num; //return thr number of edges
-}
-
-gpf_vector& directed_graph::operator[] (int suffix)
+gpf_vector& directed_graph::operator[] (int suffix) const
 {
 	return simple_matrix::operator[](suffix);
 }
 
-directed_graph& directed_graph::operator=(directed_graph& graph)
+directed_graph& directed_graph::operator=(const directed_graph& graph)
 {
+	int deg = this->get_mat_degree();
+
+	//if the input graph is empty
+	if(graph.empty())
+	{
+	//release the vertices
+		vertices.clear();
+	//release the edges too
+		this->clear();
+	//return this object
+		return (*this);
+	}
+	
+	
+	
 	
 }
 

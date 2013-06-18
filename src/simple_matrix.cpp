@@ -155,7 +155,7 @@ void simple_matrix::rm_degree()
 	this->rm_rowcol(this->degree - 1);
 }
 
-bool simple_matrix::empty()
+bool simple_matrix::empty() const
 {
 	return (this->degree == 0);
 }
@@ -277,6 +277,22 @@ simple_matrix& simple_matrix::operator=(const simple_matrix& mat)
 	
 //We are done now
 	return (*this);	
+}
+
+void simple_matrix::clear()
+{
+	//if already empty then just return
+	if(this->empty()) return;
+	
+	//else free all memory
+	for(int i = 0 ; i < degree ; i++)
+		delete this->mat_rows[i];
+		
+	free(this->mat_rows);
+	this->mat_rows = NULL;
+	
+	//make the degree of this matrix 0
+	this->degree = 0;
 }
 
 }

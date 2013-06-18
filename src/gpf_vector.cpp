@@ -115,7 +115,7 @@ gpf_vector&	gpf_vector::operator=(const gpf_vector& row)
 	return *this;
 }
 
-float& gpf_vector::operator[] (int suffix) throw (exc_out_of_bounds*)
+float& gpf_vector::operator[] (int suffix) const throw (exc_out_of_bounds*)
 {
 	//if we are within bounds
 	if(suffix <= (num_elements-1))
@@ -127,12 +127,12 @@ float& gpf_vector::operator[] (int suffix) throw (exc_out_of_bounds*)
 
 
 //returns number of elements
-int gpf_vector::size()
+int gpf_vector::size() const
 {
 	return num_elements;
 }
 
-void gpf_vector::dump_to_stdout()
+void gpf_vector::dump_to_stdout() const
 {
 	if(num_elements == 0) { std::cout<<"<EMPTY>"<<std::endl; return; }
 	
@@ -253,7 +253,7 @@ void gpf_vector::resize(int new_size)
 	this->num_elements = new_size;
 }
 
-int gpf_vector::capacity()
+int gpf_vector::capacity() const
 {
 	return this->_capacity;
 }
@@ -266,7 +266,7 @@ void gpf_vector::push_back(int val)
 	this->row_ptr[num_elements-1] = val;
 }
 
-bool gpf_vector::empty()
+bool gpf_vector::empty() const
 {
 	return (!this->num_elements == 0);
 }
@@ -287,11 +287,25 @@ float gpf_vector::pop_back()
 	return ret;
 }
 
-int gpf_vector::find(float val)
+int gpf_vector::find(float val) const
 {
 	for(int i = 0 ; i < this->size() ; i++)
 		if(row_ptr[i] == val) return i;	//if data found return index
 	return -1;	//else return -1
+}
+
+void gpf_vector::clear()
+{
+//free all memory and recert back to default values 
+	if(this->row_ptr != NULL)
+	{
+		free(this->row_ptr);
+		this->row_ptr = NULL;
+		
+		num_elements 	= 0;
+		_capacity 		= 0;
+	}
+//this function does not causes any exception
 }
 
 std::ostream& operator<<(std::ostream& out, gpf_vector& vec)

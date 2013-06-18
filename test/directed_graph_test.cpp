@@ -10,21 +10,12 @@ using namespace gpf;
 int main()
 {
 	directed_graph dir(5);
+	directed_graph d;
 	
+	dir = d;
 	
-	dir.add_vertex	(12);
-	dir.rm_vertex	(12);
-	
-	dir.dump_to_stdout();
-	
-	cout<<"The number of vertices are : "<<dir.num_vertices()<<endl;
-	
-	if(!dir.is_complete())
-		cout<<"The graph is not a complete graph"<<endl;
-	else cout<<"The graph is connected"<<endl;
-	
-
-	
+	cout<<dir<<endl;
+		
 	return 0;
 	
 }

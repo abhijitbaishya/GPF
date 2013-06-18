@@ -24,17 +24,19 @@ class vertex_set
 	//delete a vertex and returns false if lebel was not found
 		bool	rm			(int lebel);
 	//returns the index of the lebeled vertex or -1 if not exist
-		int 	index_of	(int lebel);
+		int 	index_of	(int lebel) const;
 	//retuns the lebel of index-th vertex
-		int 	lebel_of	(int index);
+		int 	lebel_of	(int index) const;
 	//change the lebel of a vertex
 		bool 	set_lebel	(int index, int lebel);
 	//returns true if a lebel exists
-		bool	exists		(int lebel);
+		bool	exists		(int lebel) const;
 	//returns if the set is empty
-		bool	empty		();
+		bool	empty		() const;
 	//size returns the size of the vertex set
-		int 	size		();
+		int 	size		() const;
+	//clear makes the vertex set empty
+		void 	clear		();
 	//assignment operator
 		vertex_set&		operator=(const vertex_set& copy);
 	
@@ -49,15 +51,15 @@ class graph_base
 {
 	public:
 	//Boolean properties
-		virtual bool empty			()  = 0;	//unusable
-		virtual bool is_null		()	= 0;	//completely disconnected i.e. no edges
-		virtual bool is_complete	() 	= 0;
-		virtual bool is_directed	() 	= 0;
-		virtual bool is_undirected	() 	= 0;
+		virtual bool empty			() const    = 0;	//unusable
+		virtual bool is_null		() const	= 0;	//completely disconnected i.e. no edges
+		virtual bool is_complete	() const 	= 0;
+		virtual bool is_directed	() const 	= 0;
+		virtual bool is_undirected	() const 	= 0;
 		//virtual bool is_connected	()  = 0;	//whether the graph is connected
 		
-		virtual int num_vertices	() = 0;
-		virtual int num_edges		() = 0;
+		virtual int num_vertices	() const = 0;
+		virtual int num_edges		() const = 0;
 		
 		/*
 		The edge related functions are graph type dependent so dont include them here
@@ -68,7 +70,7 @@ class graph_base
 	//Start vertex is required for some algorithms
 		virtual void set_ref_vertex	(int lebel) = 0;
 	//returns the distance between two vertices
-		virtual int  distance_between	(int src_lebel,int dst_lebel) = 0;
+		virtual int  distance_between	(int src_lebel,int dst_lebel) const = 0;
 	//returns the number of adjacent vertex of the ref vertex
 		//virtual void num_adjacent		()			= 0;
 	//returns the number of adjacent vertex of the index-th vertex

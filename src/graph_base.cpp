@@ -13,7 +13,7 @@ vertex_set::vertex_set(unsigned int num_vertex):lebels(num_vertex)	//initialize 
 		lebels[i] = i;
 }
 
-int vertex_set::index_of(int lebel)
+int vertex_set::index_of(int lebel) const
 {
 	if(!exists(lebel)) return -1;	//if lebel doesnot exists then return -1
 	
@@ -21,14 +21,14 @@ int vertex_set::index_of(int lebel)
 		if(lebels[i] == lebel) return i;	//return the matched index
 }
 
-int vertex_set::lebel_of(int index)
+int vertex_set::lebel_of(int index) const
 {
 	if(index >= lebels.size() || (index < 0)) return -1;	//basic validation
 	
 	return lebels[index];
 }
 
-bool vertex_set::exists(int lebel)
+bool vertex_set::exists(int lebel) const
 {
 	for(int i = 0 ; i < lebels.size() ; i++)	//if lebel already exists then return false
 		if(lebels[i] == lebel) return true;
@@ -65,12 +65,12 @@ bool vertex_set::set_lebel(int index,int lebel)
 	lebels[index] = lebel;	//set new lebel
 } 
 
-bool vertex_set::empty()
+bool vertex_set::empty() const
 {
 	return lebels.empty();
 }
 
-int vertex_set::size()
+int vertex_set::size() const
 {
 	return lebels.size();	//returns the size of the vertex array
 }
@@ -79,6 +79,12 @@ vertex_set& vertex_set::operator=(const vertex_set& copy)
 {
 	this->lebels = copy.lebels;
 	return (*this);
+}
+
+void vertex_set::clear()
+{
+//release all the vertices
+	lebels.clear();
 }
 
 }
