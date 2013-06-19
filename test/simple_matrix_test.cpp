@@ -8,6 +8,7 @@ int main()
 {
 	simple_matrix simp(50);
 	
+	cout<<"This is my modified line";
 	
 	cout<<simp<<endl;
 
