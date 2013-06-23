@@ -8,12 +8,7 @@ int main()
 {
 	gpf_vector vec(17);
 	
-	gpf_vector vec2(4);
-	
-	vec.push_back(100);
-	
-	cout<<vec.size()<<" "<<vec2.size()<<endl;
-	cout<<vec.capacity()<<" "<<vec2.capacity()<<endl;
+	cout<<vec;
 	
 	return 0;
 	

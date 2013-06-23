@@ -10,11 +10,12 @@ using namespace gpf;
 int main()
 {
 	directed_graph dir(5);
+	
 	directed_graph d;
 	
-	cin>>d;
+	dir = d;
 	
-	cout<<d;
+	cout<<dir;
 		
 	return 0;
 	

@@ -50,7 +50,7 @@ class gpf_vector
 		void			clear				();
 	//resize the array (here size is no of elements)
 		void			resize				(int new_size);
-	//insert an element
+	//insert an element (in the middle or any valid index)
 		void 			insert				(int pos,float val);
 	//removes an elements from the back of the row
 		float 			pop_back			();

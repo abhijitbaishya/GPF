@@ -164,119 +164,26 @@ bool simple_matrix::empty() const
 simple_matrix& simple_matrix::operator=(const simple_matrix& mat)
 {
 	gpf_vector**	temp = NULL;
-	//if the input matrix is empty
-	if(mat.degree == 0 )
-	{
-	//delete each individual rows
-		for(int  i = 0 ; i < degree ; i++)
-			delete this->mat_rows[i];
-	//free the container
-		free(this->mat_rows);
-	//important for destructor
-		this->mat_rows = 0;
-	//make degree = 0 
-		this->degree = 0;
-	//we are done
-	return (*this);
-	}
 	
-	//if this object is empty but input matrix is non empty
-	if(this->degree == 0)
+	//clear this matrix
+	this->clear();
+
+	//allocate an array of gpf_vector
+	this->mat_rows = (gpf_vector**)malloc
+									( 
+										sizeof(gpf_vector*) * 
+										mat.degree
+									);
+
+	for(int i = 0 ; i < mat.degree ; i++)
 	{
-		try
-		{
-		//store the degree for future reference
-			this->degree = mat.degree;
-		//allocate degree number of row pointers
-			mat_rows = (gpf_vector**)malloc( sizeof(gpf_vector*) * degree);
-		
-			for(int i = 0; i < degree ; i++)
-			{
-			//allocate the rows
-				this->mat_rows[i] = new gpf_vector();
-			//copy values from input matrix rows this this objects rows
-				(*mat_rows[i]) = (*mat.mat_rows[i]);
-			}		
-		}
-		catch(...)
-		{
-		//something went wrong so rethrow our exception
-			throw new exc_alloc_failed();
-			this->degree = 0;
-		}
+		//create and assign the empty rows
+		this->mat_rows[i] = new gpf_vector((*mat.mat_rows[i]));
 	}
-	//This matrix is non empty, input matrix is non empty and both have same degree
-	else if(this->degree == mat.degree)
-	{
-		//just copy all the rows to this matrix making use of gpf_vector::operator=
-		for(int i = 0 ; i < degree ; i ++)
-			(*mat_rows[i]) = (*mat.mat_rows[i]);
-	}
-	//if this object is non empty and input matrix is also non empty and this matrix is smaller
-	else if(this->degree < mat.degree)
-	{
-		//allocate large enough array to hold same number of row pointers as input matrix
-		temp = (gpf_vector**)malloc(sizeof(gpf_vector*) * mat.degree);
-		
-		//in-case allocation failed
-		if(temp == NULL) throw new exc_alloc_failed();
-		
-		//copy the old data into the bigger array
-		for(int i = degree - 1 ; i >= 0 ; i--)
-			temp[i] = this->mat_rows[i];
-		
-		//free the old matrix
-		//( old array is surely created because we checked for 
-		//empty matrix in previous if block )
-		free(this->mat_rows);
-		this->mat_rows = NULL;	//good habit
-		
-		//append extra arrays at the end
-		for(int i = degree ; i < mat.degree ; i++)
-			temp[i] = new gpf_vector();	//empty vectors are created faster
-		
-		//now copy all the rows of input matrix making use of operator= of gpf_vector class
-		for(int i = 0 ; i < mat.degree ; i++)
-			(*temp[i]) = (*mat.mat_rows[i]);
-		
-		//update the original pointer
-		this->mat_rows = temp;
-		
-		//update degree
-		this->degree = mat.degree;
-	}
-	//if input matrix is non empty, our matrix is non empty and this->degree > mat.degree
-	else
-	{
-		//allocate a smaller array of row pointers
-		gpf_vector** temp = (gpf_vector**) malloc ( sizeof(gpf_vector*) * (this->degree - mat.degree) );
-		
-		//copy original entries to shrinked array
-		for(int  i = mat.degree - 1 ; i >= 0 ; i--)
-			temp[i] = this->mat_rows[i];	
-		
-		//delete extra rows from the original array
-		for(int i = mat.degree ; i < this->degree ; i++)
-			delete this->mat_rows[i];
-			
-		//delete the original array
-		free(this->mat_rows);
-		this->mat_rows = NULL;
-		
-		//update the original pointer
-		this->mat_rows = temp;
-		
-		//update the degree
-		this->degree = mat.degree;
-		
-		//now that this object has same no of rows as that of the input matrix
-		//we can copy from input matrix all the arrays
-		for(int i = 0 ; i < this->degree ; i++)
-			(*mat_rows[i]) = (*mat.mat_rows[i]);
-			
-	}
-	
-//We are done now
+
+	//update the degree
+	this->degree = mat.degree;
+
 	return (*this);	
 }
 

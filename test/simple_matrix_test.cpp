@@ -6,8 +6,10 @@ using namespace gpf;
 
 int main()
 {
-	simple_matrix simp(50);
+	simple_matrix simp(10);
+	simple_matrix s(20);
 	
+	simp = s;
 	
 	cout<<simp<<endl;
 

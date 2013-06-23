@@ -1,11 +1,16 @@
 #include 	"../include/directed_graph.h"
 #include	<stdio.h>
+
+
 namespace gpf
 {
 std::istream& operator>>(std::istream& in, directed_graph& graph)
 {
 	int num_vertex;
 	int temp_lebel;
+	
+	//first of all clear the previous contrnts
+	graph.clear();
 
 	std::cout<<std::endl<<"[GPATH INPUT :]"<<std::endl
 			 <<"Number of vertices : ";
@@ -41,6 +46,7 @@ std::istream& operator>>(std::istream& in, directed_graph& graph)
 			in>>graph[i][j];
 			
 	std::cout<<"[END OF INPUT]"<<std::endl<<std::endl;
+	return in;
 }
 std::ostream&	operator<<(std::ostream& out,directed_graph& graph)
 {
@@ -62,7 +68,7 @@ std::ostream&	operator<<(std::ostream& out,directed_graph& graph)
 			
 	max_val = max_lebel > max_edge ? max_lebel : max_edge;
 	
-	sprintf(num_digit,"%d",max_val);
+	sprintf(num_digit,"%f",max_val);
 	
 	int space = 1+strlen(num_digit);
 	
@@ -138,13 +144,14 @@ directed_graph::directed_graph(int num_vertices):
 
 directed_graph::directed_graph(const directed_graph& copy)
 {
-	//copy the vertex set
+	//copy the vertices
 	this->vertices = copy.vertices;
 }
 
 bool directed_graph::empty() const
 {
-	return vertices.empty();
+	//return false is vertices as well as edges are empty
+	return vertices.empty() && simple_matrix::empty();
 }
 
 //returns true if null graph
@@ -259,9 +266,12 @@ gpf_vector& directed_graph::operator[] (int suffix) const
 
 directed_graph& directed_graph::operator=(const directed_graph& graph)
 {
+	//degree of this graph
 	int this_deg = this->get_mat_degree();
+	//degree of the input graph
 	int src_deg  = graph.get_mat_degree();
 
+	
 	//if the input graph is empty
 	if(graph.empty())
 	{
@@ -270,21 +280,20 @@ directed_graph& directed_graph::operator=(const directed_graph& graph)
 	//return this object
 		return (*this);
 	}
-	//if this object is empty but input graph is not
-	if(this->empty())
-	{
-	//copy the vertex set
-		this->vertices = graph.vertices;
-	//add a row+colm at a time until it is equal in size with input graph
-		for(int i = 0 ; i < src_deg ; i++)
-			this->add_degree();
-	//now that sizes are same copy each row of graph using the [] operator
-		for(int i = 0 ; i < src_deg ; i++)
-			(*this)[i] = graph[i];
-	//done
-		return (*this);
-	}
 	
+	//clear this object
+	this->clear();
+	
+	//copy the vertex set
+	this->vertices = graph.vertices;
+
+	//make this graph large enough to accomodate input graph
+	for(int i = 0 ; i < src_deg ; i++)
+		this->add_degree();
+	
+	//now copy each row from the input graph
+	for(int i = 0 ; i < src_deg ; i++)
+		(*this)[i] = graph[i];
 	
 	return (*this);
 }

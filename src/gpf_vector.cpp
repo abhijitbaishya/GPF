@@ -16,37 +16,24 @@ gpf_vector::gpf_vector()
 //gpf_vector constructor
 gpf_vector::gpf_vector(int num_elements)
 {
+	//first thing first make all pointers NULL
+	row_ptr 		= NULL;
 	//number of elements cannot be negative
 	if(num_elements < 0) throw new exc_invalid_operation();
 	
 	if(num_elements == 0)
 	{
-		//it is okay to have 0 elements in a row
-		row_ptr 		= NULL;
+		//its ok to have 0 element rows
 		this->num_elements 	= 0;
 		this->_capacity  = 0;
+		//nothing else to do
+		return;
 	}
-	if(num_elements != 0)
-	try
-	{
-		//round capacity to 16 units boundary
-		this->_capacity = (
-							num_elements % 16 ? 
-							num_elements - (num_elements % 16) + 16 : 
-							num_elements
-						 );
-		//allocate capacity no. of floats
-		this->row_ptr = (float*) malloc ( sizeof(float) * this->_capacity );
-		//zero initialize the whole memory
-		memset(this->row_ptr,0, sizeof(float) * num_elements);
-		//update the number of elements: note that num_elements <= capacity
-		this->num_elements = num_elements;
-	}
-	catch(...)
-	{
-		//something went wrong : revert to default values
-		throw new exc_alloc_failed();	//throw our own exception
-	} 
+	//make room (num_elements,_capacity and row_ptr will be updated by resize function)
+	this->resize(num_elements);
+	//default values
+	for(int  i = 0 ; i < num_elements ; i++) this->row_ptr[i] = -1.7623576235f;
+	//done
 }
 
 //The destructor defination
@@ -69,7 +56,11 @@ gpf_vector::gpf_vector(const gpf_vector& row)
 #ifdef DEBUG
 	std::cout<<"Copy ctor invoked"<<std::endl;
 #endif
-	gpf_vector& temp = const_cast<gpf_vector&>(row);
+
+	//initialize to default values
+	this->row_ptr = NULL;
+	this->_capacity = 0;
+	this->num_elements = 0;
 	
 	//if input array is empty then make this empty too
 	if(row.num_elements == 0) { this->resize(0); return;}
@@ -79,10 +70,10 @@ gpf_vector::gpf_vector(const gpf_vector& row)
 	
 	//copy all elements
 	for(int i = 0; i < row.num_elements ; i++ )
-		row_ptr[i] = temp[i];
+		row_ptr[i] = row[i];
 	
 	//copy other states
-	this->num_elements = temp.num_elements;
+	this->num_elements = row.num_elements;
 }
 
 gpf_vector&	gpf_vector::operator=(const gpf_vector& row)
@@ -116,9 +107,8 @@ float& gpf_vector::operator[] (int suffix) const throw (exc_out_of_bounds*)
 {
 	//if we are within bounds
 	if(suffix <= (num_elements-1))
-	{
 		return row_ptr[suffix];
-	}
+		
 	else throw  new exc_out_of_bounds(suffix);	//throw a out of bounds exception
 }
 
