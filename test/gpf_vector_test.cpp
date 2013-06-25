@@ -10,6 +10,9 @@ int main()
 	
 	cout<<vec;
 	
+	//This is our contribution to GPF project
+	cout<<"We changed this line of code"<<endl;
+	
 	return 0;
 	
 }

@@ -15,7 +15,13 @@ int main()
 	
 	dir = d;
 	
+<<<<<<< HEAD
 	cout<<dir;
+=======
+	cout<<d;
+	
+	cout<<"My modification"<<endl;
+>>>>>>> c2889557cd37170c41c92d5d1d65f4ca83d1f5c9
 		
 	return 0;
 	
