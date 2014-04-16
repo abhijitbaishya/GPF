@@ -20,7 +20,7 @@ int main()
 =======
 	cout<<d;
 	
-	cout<<"My modification"<<endl;
+	cout<<"Newly Modified.."<<endl;
 >>>>>>> c2889557cd37170c41c92d5d1d65f4ca83d1f5c9
 		
 	return 0;
